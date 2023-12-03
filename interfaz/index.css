@@ -1,0 +1,175 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    /*Fuente: https://stackoverflow.com/questions/3971880/how-to-make-shadow-on-border-bottom*/
+    -webkit-box-shadow: 0px 12px 6px -12px #222;
+    -moz-box-shadow: 0px 12px 6px -12px #222;
+    box-shadow: 0px 12px 6px -12px #222;
+    z-index: 1000;
+}
+
+.principal{
+    height: calc(100vh - 64px);
+    margin: 0px;
+}
+
+.menu ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100%;
+    gap: 0.5em;
+}
+
+.menu ul li {
+    /*QUitar las bolicas de los li en los ul */
+    list-style-type: none;
+
+     /* Como no es de tipo button
+    se pierde el cursor en forma de mano 
+    asi que hay que ponerlo */
+    cursor: pointer;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+
+    background-position: top;
+    height: 30px;
+    width: fit-content;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    border: none;
+    padding-top: 30px;
+    background-size: 30px 30px;
+
+    font-size: smaller;
+}
+
+.menu ul li:hover {
+    font-weight: bold;
+    color: rgb(223, 129, 42);;
+}
+
+.examen {
+    background-image: url('http://localhost/erasmus/interfaz/images/examen.png');
+}
+
+.examen:hover{
+    background-image: url('http://localhost/erasmus/interfaz/images/examen-seleccionado.png');
+}
+
+.contenido-iframe{
+    width: 100%; 
+    height: 94%;
+    background-color: rgb(229 221 210 / 34%);
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+}
+
+#iframe {
+    background-color: white;
+    border-color: rgb(229 221 210);
+    width:80%;
+    height: 100%;
+    border: unset; 
+}
+
+#logo{
+    background-image: url('http://localhost/erasmus/interfaz/images/logo.png');
+    background-repeat: no-repeat;
+    border: none;
+    background-size: 350px 65px;
+    height: 60px;
+    width: 400px;
+    margin-left: 0.5em;
+}
+
+.informacion-usuario {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+}
+
+#nombre {
+    font-size: large;
+    font-weight: bold;
+    margin: 0;    
+}
+
+#foto {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid  rgb(223, 129, 42);
+}
+
+.pie{
+    background-color: rgba(103, 166, 179,0.2);
+    width: 100%;
+    height: 6%;
+
+    -webkit-box-shadow: 0px -11px 6px -12px #222;
+    -moz-box-shadow: 0px -11px 6px -12px #222;
+    box-shadow: 0px -11px 6px -12px #222;
+
+}
+
+.pie address {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contenido-datos-direccion{
+   display: flex;
+   align-items: center;
+   gap: 0.75em;
+}
+
+.contenido-datos-contacto{
+    padding: 0.75em;
+    display: flex;
+    gap: 2em;
+}
+
+#emailContacto{
+    font-size: small;
+    color: #3e3e3e;
+}
+#telefonoContacto{
+    font-size: small;
+    color: #3e3e3e;
+}
+
+.redes-sociales{
+    display: flex;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.redes-sociales a{
+    margin-left: 0.5em;
+}
+.redes-sociales .iconos {
+    display: flex;
+}
+
+.redes-sociales a div {
+    background-size: 1.5em 1.5em;
+    height: 1.5em;
+    width: 1.5em;
+}
+
+#facebook{
+    background-image: url('http://localhost/erasmus/interfaz/images/facebook.png');
+}
+
+#blogErasmus{
+    background-image: url('http://localhost/erasmus/interfaz/images/blogErasmus.png');
+    width: 3em;
+
+    background-size: 3em 2em;
+
+}

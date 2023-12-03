@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/comun.css">
+    <script src="http://localhost/erasmus/cliente/index.js"></script>
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/index.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700&display=swap" rel="stylesheet">
+    
+    <title>IES Las Fuentezuelas - Programa de becas Erasmus</title>
+</head>
+<body class="principal">
+
+    <div id="header" class="header">
+        <div id="logo">
+            <!-- logo autoescuela, no depende del usuario-->
+        </div>
+
+        <nav class="menu">
+            <ul id="botones">
+                <!-- Botones que puede acceder el usuario en funcion de su rol -->
+            </ul>
+        </nav>
+
+        <div class="informacion-usuario">
+            <!-- Nombre y foto del usuario-->
+            <div><p id="nombre"></p></div>
+            <div id="foto"></div>
+            <button class="boton-primario" id="logout">Logout</button>
+            <button class="boton-primario" id="login">Entrar</button>
+        </div>
+        
+    </div>
+    
+    <div id="contenido" class="contenido-iframe">
+        <iframe id="iframe"></iframe>
+    </div>
+
+    <footer class="pie descripcion">
+        <address>        
+            <div class="contenido-datos-contacto">
+                <a id="telefonoContacto" href="tel:+34680000000">953 36 69 05</a><br>
+                <a id="emailContacto" href="mailto:laragomezana@gmail.com" title="Envio de email">23002449.edu@juntadeandalucia.es</a>
+            </div>
+            <div class="redes-sociales">
+                <div class="iconos">
+                    <a target="_blank" href="https://www.facebook.com/p/IES-Las-Fuentezuelas-100075457946240/"><div id="facebook"></div></a>
+                    <a target="_blank" href="https://blogsaverroes.juntadeandalucia.es/ieslasfuentezuelas/erasmus/"><div id="blogErasmus"></div></a>
+                </div>
+            </div>
+
+            <div class="contenido-datos-direccion">
+                <p>
+                    Dirección: Av. Arjona, 5, 23006 Jaén
+                </p>
+            </div>
+        </address>
+    </footer>
+</body>
+</html>

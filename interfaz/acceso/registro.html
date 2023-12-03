@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/acceso/acceso.css">
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/comun.css">
+    <script src="http://localhost/erasmus/cliente/acceso/acceso.js"></script>
+    <title>Registro</title>
+</head>
+<body>
+    <div id="mensajeExito"></div>
+    <form id="registro" >  
+        <div class= "registro" >
+            <div class="columna">
+                <div id="grupoNombre">
+                    <label>Nombre</label>
+                    <input 
+                        type="text" 
+                        id="nombre"
+                        name="nombre"
+                        >
+                </div>
+                <div id="grupoTelefono">
+                    <label>Número de telefono</label>
+                    <input 
+                        type="tel" 
+                        id="telefono"
+                        name="telefono"
+                        >
+                </div>
+                <div id="grupoPassword">
+                    <label>Password</label>
+                    <input
+                        type="password" 
+                        id="password"
+                        name="password"
+                        >
+                </div>
+                <div id="grupoPassword2">
+                    <label>Repite password</label>
+                    <input
+                        type="password" 
+                        id="password2"
+                        name="password2"
+                        >
+                </div>
+                
+            </div>
+            <div class="columna">
+                <div id="grupoApellidos">
+                    <label>Apellidos</label>
+                    <input 
+                        type="text" 
+                        id="apellidos"
+                        name="apellidos"
+                        >
+                </div>
+                <div id="grupoFechaNac">
+                    <label>Fecha de Nacimiento</label>
+                    <input 
+                        type="date" 
+                        id="fechaNac"
+                        name="fechaNac"
+                        >
+                </div>
+                <div id="grupoDomicilio">
+                    <label>Domicilio</label>
+                    <input 
+                        type="text" 
+                        id="domicilio"
+                        name="domicilio"
+                        >
+                </div>
+            </div>
+    
+            <div class="columna">
+                <div id="grupoDni">
+                    <label>DNI</label>
+                    <input 
+                        type="text" 
+                        id="dni"
+                        name="dni"
+                        >
+                </div>
+                
+                <div id="grupoCorreo">
+                    <label>Correo electrónico</label>
+                    <input 
+                        type="email" 
+                        id="correo"
+                        name="correo"
+                        >
+                </div>
+                <div id="grupoCurso">
+                    <label>Curso Matriculado</label>
+                    <select id="curso" name="curso" class="selector">
+                        <option value="1">Gestión Administrativa</option>
+                        <option value="2">Instalaciones Eléctricas y Automáticas</option>
+                        <option value="3">Instalaciones de Telecomunicaciones</option>
+                        <option value="4">Mantenimiento Electromecánico</option>
+        
+                    </select>
+                </div>
+            </div>
+            
+            <div class="columna" id="elementosTutor">
+                <div id="grupoNombreTutor">
+                    <label>Nombre del tutor</label>
+                    <input 
+                        type="text" 
+                        id="nombreTutor"
+                        name="nombreTutor"
+                        >
+                </div>
+                <div id="grupoApellidosTutor">
+                    <label>Apellidos del tutor</label>
+                    <input 
+                        type="text" 
+                        id="apellidosTutor"
+                        name="apellidosTutor"
+                        >
+                </div>
+                <div id="grupoDniTutor">
+                    <label>DNI del tutor</label>
+                    <input 
+                        type="text" 
+                        id="dniTutor"
+                        name="dniTutor"
+                        >
+                </div>
+                <div id="grupoDomicilioTutor">
+                    <label>Domicilio del tutor</label>
+                    <input 
+                        type="text" 
+                        id="domicilioTutor"
+                        name="domicilioTutor"
+                        >
+                </div>
+                <div id="grupoTelefonoTutor">
+                    <label>Número de telefono del tutor</label>
+                    <input 
+                        type="tel" 
+                        id="telefonoTutor"
+                        name="telefonoTutor"
+                        >
+                </div>
+            </div>    
+        </div>
+        
+
+        <div class="boton">
+            <button class="boton-primario" type="button" onclick="registrar()">Registro</button>
+        </div>      
+    </form>
+    <div>
+        <p class="descripcion">Si tienes ya una cuenta, entra <a href="http://localhost/erasmus/interfaz/acceso/login.html">aquí</a></p>
+    </div>
+</body>
+</html>

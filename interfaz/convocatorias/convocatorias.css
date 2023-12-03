@@ -1,0 +1,79 @@
+.convocatoria {
+    display: flex;
+    flex-direction: row;
+}
+
+.informacion {
+    margin-left: 0.5em;
+}
+
+.convocatoria .informacion:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.estado {
+    width: 0.5em;
+    position: relative;
+    display: inline-block;
+}
+
+.estado:after {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    left: 0;
+    display: none;
+    text-align: center;
+    background-color: #000;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px;
+    width: fit-content;
+}
+
+.estado:hover:after {
+    display: block;
+}  
+
+.estado-borrador {
+    background-color: lightsalmon;
+}
+
+.estado-borrador:after {
+    content: "En borrador";
+}
+
+.estado-solicitada {
+    background-color: lightgreen;
+}
+
+.estado-solicitada:after {
+    content: "Solicitada";
+}
+
+.estado-pruebas {
+    background-color: lightblue;
+}
+
+.estado-pruebas:after {
+    content: "Periodo de pruebas";
+}
+
+.estado-provisional {
+    background-color: lightpink;
+}
+
+.estado-provisional:after {
+    content: "Listado provisional";
+}
+
+.estado-definitivo {
+    background-color: lightcoral;
+}
+
+.estado-definitivo:after {
+    content: "Listado definitivo";
+}
