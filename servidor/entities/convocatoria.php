@@ -3,9 +3,9 @@ class Convocatoria {
     // Properties
     private $id;
     private $proyectoId;
+    private $proyectoNombre;
     private $descripcion;
     private $nombre;
-
     private $movilidades;
     private $largaDuracion;
     private $fechaInicioSolicitudes;
@@ -19,7 +19,7 @@ class Convocatoria {
     function __construct($id, $movilidades, $largaDuracion, 
                             $fechaInicioSolicitudes, $fechaFinSolicitudes, 
                             $fechaInicioPruebas, $fechaFinPruebas, $fechaListaProvisional, 
-                            $fechaListaDefinitiva, $proyectoId, $descripcion, $nombre) {
+                            $fechaListaDefinitiva, $proyectoId, $descripcion, $nombre, $proyectoNombre = null) {
         $this->id = $id;
         $this->movilidades = $movilidades;
         $this->largaDuracion = $largaDuracion;
@@ -32,6 +32,7 @@ class Convocatoria {
         $this->proyectoId = $proyectoId;
         $this->descripcion = $descripcion;
         $this->nombre = $nombre;
+        $this->proyectoNombre = $proyectoNombre;
     }
 
     // Methods
@@ -107,6 +108,24 @@ class Convocatoria {
     }
     function set_nombre($nombre){
         $this->nombre = $nombre;
+    }
+
+    function to_json() {
+        return '{'.
+            '"id" : ' . $this->id . ',' .
+            '"proyectoId" : ' . $this->proyectoId . ',' .
+            '"proyectoNombre" : "' . $this->proyectoNombre . '",' .
+            '"descripcion" : "' . $this->descripcion . '",' .
+            '"nombre" : "' . $this->nombre . '",' .
+            '"movilidades" : ' . $this->movilidades . ',' .
+            '"largaDuracion" : ' . $this->largaDuracion . ',' .
+            '"fechaInicioSolicitudes" : "' . $this->fechaInicioSolicitudes . '",' .
+            '"fechaFinSolicitudes" : "' . $this->fechaFinSolicitudes . '",' .
+            '"fechaInicioPruebas" : "' . $this->fechaInicioPruebas . '",' .
+            '"fechaFinPruebas" : "' . $this->fechaFinPruebas . '",' .
+            '"fechaListaProvisional" : "' . $this->fechaListaProvisional . '",' .
+            '"fechaListaDefinitiva" : "' . $this->fechaListaDefinitiva . '"' .
+            '}';
     }
 }
 ?>

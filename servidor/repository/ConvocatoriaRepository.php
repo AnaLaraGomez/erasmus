@@ -1,20 +1,104 @@
 <?php
     class ConvocatoriaRepository {
 
+        public static function obtenerConvocatoriasAbiertas() {
+            $consultas = Conexion::basedatos()->query("SELECT c.*, p.nombre as proyecto_nombre from convocatoria c
+            inner join proyecto p on p.id = c.proyecto_id
+            where fecha_inicio_solicitudes <= NOW();");
+            $convocatorias = array();
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $convocatorias[] = new Convocatoria(
+                    $resultados->id,
+                    $resultados->movilidades,
+                    $resultados->larga_duracion,
+                    $resultados->fecha_inicio_solicitudes,
+                    $resultados->fecha_fin_solicitudes,
+                    $resultados->fecha_inicio_pruebas,
+                    $resultados->fecha_fin_pruebas,
+                    $resultados->fecha_lista_provisional,
+                    $resultados->fecha_lista_definitiva,
+                    $resultados->proyecto_id,
+                    $resultados->descripcion,
+                    $resultados->nombre,
+                    $resultados->proyecto_nombre
+                );
+            }
+            return $convocatorias;
+        }
+
+        public static function obtenerConvocatoriaDetalle($id) {
+            $detalle = array();
+      
+            $detalle['destinatarios'] = array();
+            $consultas = Conexion::basedatos()->query("SELECT 
+                d.codigo_grupo codigoGrupo, 
+                d.nombre as destinatarioNombre
+                FROM convocatoria c
+                INNER JOIN destinatario_convocatoria dc on dc.convocatoria_id = c.id
+                INNER JOIN destinatario d on d.id = dc.destinatario_id
+                where c.id  = $id");
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $detalle['destinatarios'][] =  $resultados;
+            }
+
+            $detalle['idiomas'] = array();
+            $consultas = Conexion::basedatos()->query("SELECT 
+                i.nivel as idioma,
+                cbi.puntuacion as puntuacion
+                FROM convocatoria c
+                INNER JOIN convocatoria_baremo_idioma cbi on cbi.convocatoria_id = c.id
+                INNER JOIN idiomas i on i.id = cbi.idioma_id
+                where c.id = $id");
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $detalle['idiomas'][] =  $resultados;
+            }
+
+            $detalle['items'] = array();
+            $consultas = Conexion::basedatos()->query("SELECT 
+                ib.nombre as itemNombre,
+                ib.sube_alumno as subeAlumno,
+                cb.puntuacion_max as notaMax,
+                cb.requisito,
+                cb.min_requisito as notaMin
+                FROM convocatoria c
+                INNER JOIN convocatoria_baremo cb on cb.convocatoria_id = c.id
+                INNER JOIN item_baremable ib on ib.id = cb.item_id
+                where c.id = $id");
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $detalle['items'][] =  $resultados;
+            }
+            return $detalle;
+        }
+
+        public static function obtenerConvocatoriaBaremablesAlumno($convocatoriaId, $userId) {
+            $consultas = Conexion::basedatos()->query("SELECT 
+                ib.nombre as itemNombre,
+                b.url as itemUrl
+                from baremacion b
+                inner JOIN item_baremable ib on ib.id = b.item_id
+                where b.convocatoria_id = $convocatoriaId 
+                and b.candidato_id = $userId");
+            $baremables = array();
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $baremables[] =  $resultados;
+            }
+            return $baremables;
+        }
+
         public static function obtenerConvocatoriaPorId($id) {
             $consultas = Conexion::basedatos()->query("Select * from convocatoria where id = $id");
             while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
                  return new Convocatoria(
                     $resultados->id,
                     $resultados->movilidades,
-                    $resultados->largaDuracion,
-                    $resultados->fechaInicioSolicitudes,
-                    $resultados->fechaFinSolicitudes,
-                    $resultados->fechaInicioPruebas,
-                    $resultados->fechaFinPruebas,
-                    $resultados->fechaListaProvisional,
-                    $resultados->fechaListaDefinitiva,
-                    $resultados->proyectoId,
+                    $resultados->larga_duracion,
+                    $resultados->fecha_inicio_solicitudes,
+                    $resultados->fecha_fin_solicitudes,
+                    $resultados->fecha_inicio_pruebas,
+                    $resultados->fecha_fin_pruebas,
+                    $resultados->fecha_lista_provisional,
+                    $resultados->fecha_lista_definitiva,
+                    $resultados->proyecto_id,
                     $resultados->descripcion,
                     $resultados->nombre,
                 );
@@ -51,7 +135,6 @@
 
             return Conexion::basedatos()->lastInsertId();
         }
-
 
         public static function añadirDestinatarioAConvocatoria($convocatoriaId, $destinatarioId) {
             Conexion::basedatos()->exec("INSERT INTO `destinatario_convocatoria` (convocatoria_id, destinatario_id) VALUES ($convocatoriaId, $destinatarioId)");

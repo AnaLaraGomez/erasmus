@@ -10,14 +10,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($erroresValidacion);
         return;
     }
-    $proyectos = ProyectoRepository::obtenerProyectos(); // [obj1, obj2..]
-    $jsonRespObjects=array();
-    foreach ($proyectos as $proyecto) {
-        $jsonRespObjects[] =  $proyecto->to_json();
-    }
-    // $jsonRespObjects => ['{...}', '{...}']
-    // implode(',', $jsonRespObjects) => '{...},{...}'
-    $jsonRespString = '[' . implode(',', $jsonRespObjects) . ']';
+    $proyectos = ProyectoRepository::obtenerProyectos();
+    $jsonRespString = JsonEncodeHelper::encodeArray($proyectos);
     echo $jsonRespString;
     return;
 
