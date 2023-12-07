@@ -1,7 +1,4 @@
 <?php
-    require_once($_SERVER['DOCUMENT_ROOT'].'/erasmus/servidor/repository/conexion.php');
-    require_once($_SERVER['DOCUMENT_ROOT'].'/erasmus/servidor/entities/candidato.php');
-
     class CandidatoRepository {
 
         public static function obtenerCandidatoPorId($id) {
@@ -11,16 +8,16 @@
                     $resultados->id,
                     $resultados->nombre,
                     $resultados->apellidos,
-                    $resultados->fechaNac,
+                    $resultados->fecha_nacimiento,
                     $resultados->curso,
                     $resultados->telefono,
                     $resultados->correo,
                     $resultados->domicilio,
-                    $resultados->tutorNombre,
-                    $resultados->tutorApellidos,
-                    $resultados->tutorDni,
-                    $resultados->tutorDomicilio,
-                    $resultados->tutorTelefono
+                    $resultados->tutor_nombre,
+                    $resultados->tutor_apellidos,
+                    $resultados->tutor_dni,
+                    $resultados->tutor_domicilio,
+                    $resultados->tutor_telefono
                 );
             }
         }
@@ -43,10 +40,10 @@
             $tutorDni = $candidato->get_tutorDni();
             $tutorDomicilio = $candidato->get_tutorDomicilio();
             $tutorTelefono = $candidato->get_tutorTelefono();
-
+            
             Conexion::basedatos()->exec("
-            INSERT INTO `candidato` (id, nombre, apellidos, fechaNac, curso, telefono, correo, domicilio, tutorNombre, tutorApellidos, tutorDni, tutorDomicilio, tutorTelefono) 
-            VALUES ($id, '$nombre', '$apellidos', '$fechaNac', '$curso', '$telefono', '$correo', '$domicilio', '$tutorNombre', '$tutorApellidos', '$tutorDni', '$tutorDomicilio', '$tutorTelefono)"); 
+            INSERT INTO `candidato` (id, nombre, apellidos, fecha_nacimiento, curso, telefono, correo, domicilio, tutor_nombre, tutor_apellidos, tutor_dni, tutor_domicilio, tutor_telefono) 
+            VALUES ($id, '$nombre', '$apellidos', '$fechaNac', '$curso', '$telefono', '$correo', '$domicilio', '$tutorNombre', '$tutorApellidos', '$tutorDni', '$tutorDomicilio', '$tutorTelefono')"); 
         }
 
         public static function actualizarCandidato($candidato) {

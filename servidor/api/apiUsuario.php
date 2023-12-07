@@ -5,7 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Obtener toda la informacion del usuario actual (con la session abierta)
     // Util para pintar el header, saber si es etc.
     $user = obtenerUsuarioDeSessionORedireccionarLogin();
-    echo $user->to_json();
+    if(isset($_GET['candidato'])) {
+        $candidato = CandidatoRepository::obtenerCandidatoPorId($user->get_id());
+        echo $candidato->to_json();
+    } else {
+        echo $user->to_json();
+    }
+    
 }
 
 elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {

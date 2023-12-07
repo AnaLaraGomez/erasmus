@@ -29,6 +29,7 @@ class Candidato {
         $this->tutorApellidos = $tutorApellidos;
         $this->tutorDni = $tutorDni;
         $this->tutorDomicilio = $tutorDomicilio;
+        $this->tutorTelefono = $tutorTelefono;
       }
 
     // Methods
@@ -115,18 +116,18 @@ class Candidato {
     function to_json() {
         return '{'.
             '"id":' . $this->id . ',' .
-            '"nombre":' . $this->nombre . ',' .
-            '"apellidos":' . $this->apellidos . ',' .
-            '"fechaNac":' . $this->fechaNac . ',' .
-            '"curso":' . $this->curso . ',' .
-            '"telefono":' . $this->telefono . ',' .
-            '"correo":' . $this->correo . ',' .
-            '"domicilio":' . $this->domicilio . ',' .
-            '"tutorNombre":' . $this->tutorNombre . ',' .
-            '"tutorApellidos":' . $this->tutorApellidos . ',' .
-            '"tutorDni":' . $this->tutorDni . ',' .
-            '"tutorDomicilio":' . $this->tutorDomicilio . ',' .
-            '"tutorTelefono":' . $this->tutorTelefono .             
+            '"nombre": "' . $this->nombre . '",' .
+            '"apellidos":"' . $this->apellidos . '",' .
+            '"fechaNac":"' . $this->fechaNac . '",' .
+            '"curso":"' . $this->curso . '",' .
+            '"telefono":"' . $this->telefono . '",' .
+            '"correo":"' . $this->correo . '",' .
+            '"domicilio":"' . $this->domicilio . '",' .
+            '"tutorNombre":"' . $this->tutorNombre . '",' .
+            '"tutorApellidos":"' . $this->tutorApellidos . '",' .
+            '"tutorDni":"' . $this->tutorDni . '",' .
+            '"tutorDomicilio":"' . $this->tutorDomicilio . '",' .
+            '"tutorTelefono":"' . $this->tutorTelefono . '"' .            
             '}';
     }
 

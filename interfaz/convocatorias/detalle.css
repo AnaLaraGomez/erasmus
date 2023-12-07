@@ -1,0 +1,72 @@
+.detalle {
+    position: relative;
+    margin-bottom: 5em;
+}
+.contenedor-botones {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    height: 5em;
+    width: 100%;
+    
+    display: flex;
+    justify-content: flex-end;
+    background-color: rgba(255, 255,255, 0.70);
+}
+
+.cabecera {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+.informacion-proyecto {
+    max-width: 40%;
+}
+
+.icono-erasmus img {
+    width: 16em;
+}
+
+.italic {
+    font-style: italic;
+}
+
+h3 {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}
+
+#modalSolicitud {
+    position: fixed;
+}
+
+form {
+    position: relative;
+}
+.botones {
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.entregable {
+    border-top: 1px solid lightgray;
+    margin-bottom: 1em;
+}
+.entregable p {
+    font-weight: bold;
+}
+
+.fila .miniatura {
+    width: 33%;
+    display: none;
+}
+
+.fila .miniatura iframe{
+    width: 100%;
+}
+
+.fila input  {
+    width: 66%;
+}

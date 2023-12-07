@@ -66,7 +66,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode($erroresValidacion);
         return;
     }
-    
+
     // El usuario existe?
     $userObj = UsuarioRepository::obtenerUsuarioPorDni($dni);
     if(!empty($userObj)) {
@@ -81,12 +81,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         Conexion::beginTrasaction();
         // Introducir nuevo usuario en base de datos
         $id = UsuarioRepository::crearUsuario($dni, $password);
-        CandidatoRepository::crearCandidato($id, $nombre, $apellidos, $fechaNac, $curso, $telefono, $correo, $domicilio, $tutorNombre, $tutorApellidos, $tutorDni, $tutorDomicilio, $tutorTelefono);
-        Conexion::commit();
+        CandidatoRepository::crearCandidato(new Candidato($id, $nombre, $apellidos, $fechaNac, $curso, $telefono, $correo, $domicilio, $tutorNombre, $tutorApellidos, $tutorDni, $tutorDomicilio, $tutorTelefono));
         ServicioEmail::enviarEmailBienvenida($correo, $nombre, $apellidos);
+        Conexion::commit();
         header("Location: http://localhost/erasmus/interfaz/acceso/login.html");
         exit();
-    } catch(PDOException $e) {
+    } catch(Throwable | Error $e) {
         // Ups! algo ha ido mal, vamos a revertir los cambios de DB y mandar error al cliente
         Conexion::rollback();
         $erroresValidacion['status_code'] = 500; // Error de servidor

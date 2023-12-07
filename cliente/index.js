@@ -20,6 +20,16 @@ window.addEventListener("load", function() {
         return respuesta.json()
     }).then((user) => {
         pintarDatosUsuario(user);
+
+        if(!user.admin) {
+            let url = 'http://localhost/erasmus/servidor/api/apiUsuario.php?candidato';
+            fetch(url)
+            .then((respuesta) => respuesta.json())
+            .then(candidatoJson => {
+                localStorage.setItem('candidato', JSON.stringify(candidatoJson))
+            })
+
+        }
     });
     
     function pintarDatosUsuario(user) {  
@@ -53,6 +63,7 @@ window.addEventListener("load", function() {
             pintarBoton('Proyectos', 'interfaz/gestion/proyectos.html',"gestion")
             pintarBoton('Convocatorias', 'servidor/forms/CrearConvocatoria.php',"asda")
             pintarBoton('Modificar Alumno', 'interfaz/gestion/alumnos.html',"generarExamen")
+            pintarBoton('Puntuar', 'interfaz/gestion/puntuar.html',"generarExamen")
         }else {   
             // Añadir los botones de alumno   
         }
@@ -93,6 +104,7 @@ window.addEventListener("load", function() {
     }
 
     function logout() {
+        localStorage.clear();
         let url = 'http://localhost/erasmus/servidor/api/apiLogin.php';
         let opciones = {
             method: "DELETE",

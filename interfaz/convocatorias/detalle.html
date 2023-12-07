@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://localhost/erasmus/interfaz/comun.css">
     <link rel="stylesheet" href="http://localhost/erasmus/interfaz/convocatorias/convocatorias.css">
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/convocatorias/detalle.css">
+    <script src="http://localhost/erasmus/cliente/validaciones.js"></script>
     <script src="http://localhost/erasmus/cliente/convocatorias/detalle.js"></script>
 
     <title>Erasmus - Convocatoria</title>
@@ -16,13 +18,107 @@
             <p>Atras</p>
         </div>
 
-        <h1 id="titulo"></h1>
+        <div class="cabecera">
+            <div class="icono-erasmus">
+                <img src="http://localhost/erasmus/interfaz/images/erasmus_icon.png" />
+            </div>
 
-        <p class="titulo">Resumen</p>
-        <p id="descripcion" class="descripcion"></p>
+            <div class="informacion-proyecto">
+                <p class="descripcion">Curso Académico: 2023-2024</p>
+                <p class="titulo"><span id="codigoProyecto"></span> <br> "<span class="italic" id="proyectoNombre"></span>"</p>
+            </div>
+        </div>
 
-        <p class="titulo">Fechas importantes</p>
+        <div class="apartado">
+            <h3>1. OBJETO DE LA CONVOCATORIA Y DESTINATARIOS DE LAS AYUDAS</h3>
+            <ul>
+                <li>Se ofertan movilidades de <span id="a1.1.tipoDur"></span> duración para la realización de prácticas en empresas de otros países de la Unión Europea dentro del programa Erasmus+ del IES Las Fuentezuelas.</li>
+                <li>Destinatarios: alumnado de <span id="a1.2.des"></span> matriculado en el IES Las Fuentezuelas en el curso 2021-2022.</li>
+            </ul>   
+        </div>
 
+        <div class="apartado">
+            <h3>2. CONDICIONES GENERALES</h3>
+            <ul>
+                <li>Movilidades: <span id="a2.movilidades"></span> movilidades de <span id="a2.duracion"></span> días.</li>
+                <li>Países de destino: Portugal y Grecia.</li>
+                <li>Requisitos para la selección:</li>
+                <ul>
+                    <li>Estar matriculado en 2º de Ciclos Formativos de Grado Medio en el IES Las Fuentezuelas en el curso 2023-2024.</li>
+                    <li>Antes de la movilidad, los participantes seleccionados deberán tener superados los módulos profesionales del ciclo formativo a excepción del módulo de Formación en Centros de Trabajo.</li>
+                    <li>Será necesario un informe de idoneidad positivo realizado por el equipo docente del grupo en el que se encuentra matriculado el candidato.</li>
+                </ul>
+                <li>El programa incluye los siguientes conceptos: ayuda individual y ayuda de transporte.</li>
+            </ul>   
+        </div>
+
+        <div class="apartado">
+            <h3>3. CRITERIOS DE SELECCIÓN O BAREMO DE LAS CANDIDATURAS</h3>
+            <ul>
+                <li>Los criterios de baremación de las candidaturas estarán supeditados al cumplimiento de las condiciones generales. Para la selección del alumnado se utilizarán los siguientes criterios:</li>
+                <ul>
+                    <li>entrada por item dentro de d.items</li>
+                </ul>
+            </ul>   
+        </div>
+        
+        <div class="apartado">
+            <h3>4. SELECCIÓN DE LOS CANDIDATOS</h3>
+            <ul>
+                <li>La puntuación final obtenida por cada candidato estará compuesta por la suma de las puntuaciones de los apartados nota media, nivel de idiomas, informe del equipo docente y entrevista personal. Se seleccionarán los candidatos que hayan obtenido una mayor puntuación.</li>
+                <li>En el caso de que dos o más solicitantes obtengan la misma puntuación total, tendrá prioridad la mejor nota media del expediente académico. Si, aún así, se mantiene el empate, tendrá prioridad quien tenga una mayor puntuación en el apartado nivel de idiomas. Por último, se desempatará teniendo en cuenta la mayor puntuación obtenida en la suma de los apartados informe de idoneidad y entrevista personal.</li>
+                <li>Al finalizar el proceso de selección se publicará el listado provisional de candidatos con las puntuaciones otorgadas en cada apartado</li>
+                <li>Los candidatos dispondrán de un plazo de 2 días lectivos, a partir de la publicación del listado provisional de candidatos, para presentar alegaciones a dicho listado.</li>
+                <li>Una vez resueltas las alegaciones presentadas, se publicará el listado definitivo con los participantes seleccionados y reservas ordenados por puntuación.</li>
+            </ul>   
+        </div>
+
+        <div class="apartado">
+            <h3>5. CALENDARIO DE ACTUACIONES</h3>
+            <ul>
+                <li>El 15 de noviembre de 2023 se realizará una reunión informativa sobre el programa Erasmus+ con el alumnado matriculado en 2o de ciclos formativos de grado medio. Hora de la reunión: 11:00 h. Lugar: Aula SUM.</li>
+                <li>Del 15 de noviembre al 24 de noviembre de 2023 el alumnado presentará la solicitud de inscripción en la Secretaría del IES Las Fuentezuelas. Se adjuntará a la misma el certificado de idiomas, en caso de poseerlo, la fotocopia del DNI del solicitante y de los padres si es menor de edad y un documento de autorización de representación si es
+                    menor de edad.</li>
+                <li>Las pruebas de selección se celebrarán del <span id="a5.inicioPruebas"></span> al <span  id="a5.finPruebas"></span>. Se notificará a los participantes el día, hora y lugar de celebración de
+                    las pruebas en el tablón de anuncios del centro educativo.</li>
+                <li>Los candidatos dispondrán de un plazo de 2 días lectivos, a partir de la publicación del listado provisional de candidatos, para presentar alegaciones a dicho listado.</li>
+                <li>Una vez resueltas las alegaciones presentadas, se publicará el listado definitivo con los participantes seleccionados y reservas ordenados por puntuación.</li>
+            </ul>   
+        </div>
+        <div class="contenedor-botones">
+            <button id="continuarBtn" class="boton-secundario">Continuar Borrador</button>
+            <button id="solicitarBtn" class="boton-primario">Solicitar</button>
+        </div>
+        <div id="modalSolicitud" class="modal">
+            <div class="modal-contenido">
+                <form id="solicitud" name="solicitud" >
+                    
+                    <div class="datos-alumno">
+                        
+                    </div>
+
+                    <div id="entregables">
+                        <!-- Una entrada por entregable que sube el alumno. Tiene minuatura del PDF que ha subido -->
+
+
+                    </div>
+
+                    <div class="botones">
+                        <button id="cerrarSolicitudBtn" type="button" class="boton-secundario">Cancelar</button>
+                        <div class="botones-ok">
+                            <button id ="guardarSolicitudBtn" type="button" class="boton-primario" >Guardar</button>
+                            <button type="submit" class="boton-primario" >Enviar</button>
+                        </div>
+                    </div>
+
+                </form>
+                <p class="nota">Si alguno de sus datos personales no es correcto, por favor, contacte con el responsable de gestión
+                    del proyecto Erasmus para su modifciación.
+                </p>
+            </div>
+        
+        </div>
     </div>
+
 </body>
 </html>

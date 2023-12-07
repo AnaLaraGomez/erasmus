@@ -29,6 +29,12 @@ input, textarea, select, datalist {
    font-size: large;
 }
 
+.nota {
+    color: lightcoral;
+    font-size: smaller;
+    
+}
+
 .grupo-radios {
     display: flex;
     justify-content: center;

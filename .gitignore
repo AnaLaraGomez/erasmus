@@ -1,0 +1,4 @@
+# No queremos que se suban a git las librerias
+servidor/vendor
+# No queremos que se suban a git los archivos que creamos
+archivos

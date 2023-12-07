@@ -55,6 +55,7 @@
 
             $detalle['items'] = array();
             $consultas = Conexion::basedatos()->query("SELECT 
+                ib.id as itemId,
                 ib.nombre as itemNombre,
                 ib.sube_alumno as subeAlumno,
                 cb.puntuacion_max as notaMax,
@@ -72,6 +73,7 @@
 
         public static function obtenerConvocatoriaBaremablesAlumno($convocatoriaId, $userId) {
             $consultas = Conexion::basedatos()->query("SELECT 
+                b.item_id as itemId,
                 ib.nombre as itemNombre,
                 b.url as itemUrl
                 from baremacion b

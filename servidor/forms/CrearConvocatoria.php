@@ -104,7 +104,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             Conexion::commit();
             header("Location: http://localhost/erasmus/servidor/forms/CrearConvocatoria.php");
             exit();
-        } catch(Throwable | Error $e) {
+        } catch(Throwable | Error $e) { // Fuente: https://www.php.net/manual/en/class.throwable.php
             // Ups! algo ha ido mal, vamos a revertir los cambios de DB
             Conexion::rollback();
         }        
@@ -159,13 +159,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="true" <?php echo ($largaDuracion == 'true' ? 'selected' : '') ?>>Si </option>
                         <option value="false" <?php echo ($largaDuracion == 'false' ? 'selected' : '') ?>>No </option>
                     </select>    
-                </div>
-            </div>
-
-            <div class="fila">
-                <div class="conjunto">
-                    <label>Descripción</label>
-                    <textarea name="descripcion" rows="3" cols="120"></textarea>
                 </div>
             </div>
 

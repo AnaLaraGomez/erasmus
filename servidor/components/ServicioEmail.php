@@ -50,12 +50,13 @@ class ServicioEmail {
         // asunto
         $mail->Subject    = "Registro Erasmus";
         // cuerpo
-    
+
         $sustitutos = array($nombre.' ',$apellidos);
         $sustituir = array ("{{nombre}}", "{{apellidos}}");
         $mail->AddEmbeddedImage('logo.png','logopng','imagen a descargar');
 
         $plantilla = str_replace($sustituir, $sustitutos, ServicioEmail::plantillaBienvenida());
+
         $mail->MsgHTML($plantilla);
         // adjuntos
         $mail->addAttachment("");
