@@ -14,30 +14,6 @@
     display: inline-block;
 }
 
-.estado {
-    width: 0.5em;
-    position: relative;
-    display: inline-block;
-}
-
-.estado:after {
-    position: absolute;
-    top: 0px;
-    right: 0;
-    left: 0;
-    display: none;
-    text-align: center;
-    background-color: #000;
-    color: #fff;
-    border-radius: 4px;
-    padding: 2px;
-    width: fit-content;
-}
-
-.estado:hover:after {
-    display: block;
-}  
-
 .estado-borrador {
     background-color: lightsalmon;
 }

@@ -7,6 +7,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
     if(isset($_GET['id'])) {
         $convocatoriaId = $_GET['id'];
         $detalle = ConvocatoriaRepository::obtenerConvocatoriaDetalle($convocatoriaId);
+        $detalle['lista'] = BaremacionRepository::listadoNotas($convocatoriaId);
+  
         if(Session::estaLogueado()) {
             $user = Session::leerDatosSession();
             $detalle['entregados'] = ConvocatoriaRepository::obtenerConvocatoriaBaremablesAlumno($convocatoriaId, $user->get_id());

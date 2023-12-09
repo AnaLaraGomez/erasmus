@@ -75,9 +75,15 @@
             $consultas = Conexion::basedatos()->query("SELECT 
                 b.item_id as itemId,
                 ib.nombre as itemNombre,
-                b.url as itemUrl
+                b.url as itemUrl,
+                b.nota as itemNota,
+                ib.sube_alumno as subeAlumno,
+                cb.puntuacion_max as notaMax,
+                cb.min_requisito as notaMin,
+                cb.requisito as requisito
                 from baremacion b
                 inner JOIN item_baremable ib on ib.id = b.item_id
+                inner JOIN convocatoria_baremo cb on cb.convocatoria_id = b.convocatoria_id  and cb.item_id = b.item_id 
                 where b.convocatoria_id = $convocatoriaId 
                 and b.candidato_id = $userId");
             $baremables = array();
@@ -85,6 +91,28 @@
                 $baremables[] =  $resultados;
             }
             return $baremables;
+        }
+
+        public static function obtenerConvocatoriaBaremablesTotales($convocatoriaId, $userId) {
+            $consultas = Conexion::basedatos()->query("SELECT 
+                cb.item_id as itemId,
+                ib.nombre as itemNombre,
+                b.url as itemUrl,
+                b.nota as itemNota,
+                ib.sube_alumno as subeAlumno,
+                cb.puntuacion_max as notaMax,
+                cb.min_requisito as notaMin,
+                cb.requisito as requisito
+                from convocatoria_baremo cb
+                left outer JOIN baremacion b on cb.convocatoria_id = b.convocatoria_id and cb.item_id = b.item_id and b.candidato_id = $userId
+                inner JOIN item_baremable ib on ib.id = cb.item_id
+                where cb.convocatoria_id = $convocatoriaId");
+
+                $baremables = array();
+                while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                    $baremables[] =  $resultados;
+                }
+                return $baremables;    
         }
 
         public static function obtenerConvocatoriaPorId($id) {
@@ -105,6 +133,50 @@
                     $resultados->nombre,
                 );
             }
+        }
+
+        public static function obtenerConvocatoriasPuntuables() {
+            // En pruebas o en provisional
+            $respuesta = array();
+            $consultas = Conexion::basedatos()->query("SELECT 
+                c.*, p.nombre as proyecto_nombre 
+                from convocatoria c
+                inner join proyecto p on p.id = c.proyecto_id
+                where fecha_inicio_pruebas >= NOW() 
+                AND fecha_lista_definitiva >= NOW() ");
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $convocatoriaArray = array();
+                $convocatoriaArray['id'] = $resultados->id;
+                $convocatoriaArray['nombre'] = $resultados->nombre;
+                $convocatoriaArray['proyectoNombre'] = $resultados->proyecto_nombre;
+                $convocatoriaArray['fechaInicioPruebas'] = $resultados->fecha_inicio_pruebas;
+                $convocatoriaArray['fechaFinPruebas'] = $resultados->fecha_fin_pruebas;
+                $convocatoriaArray['fechaListaProvisional'] = $resultados->fecha_lista_provisional;
+                $convocatoriaArray['candidatos'] = array();
+
+                $consultaCandidatos = Conexion::basedatos()->query("SELECT 
+                    u.id as id,
+                    u.dni as dni,
+                    c.nombre as nombre,
+                    c.apellidos as apellidos,
+                    count(b.nota)as evaluadas,
+                    count(cb.item_id) as evaluables,
+                    count(b.nota) = count(cb.item_id) as evaluado
+                    from baremacion b
+                    inner JOIN usuario u on u.id = b.candidato_id
+                    inner JOIN candidato c on c.id = b.candidato_id
+                    inner JOIN convocatoria_baremo cb on cb.convocatoria_id = b.convocatoria_id and cb.item_id = b.item_id
+                    where b.convocatoria_id = $resultados->id                    
+                    group by u.dni
+                    order by evaluado asc;");
+
+                while ($resultadosCandidatos = $consultaCandidatos->fetch(PDO::FETCH_OBJ)) {
+                    $convocatoriaArray['candidatos'][] =  $resultadosCandidatos;
+                }
+                $respuesta[] = $convocatoriaArray;
+            }
+            return $respuesta;
+
         }
 
         public static function eliminarConvocatoriaPorId($id) {

@@ -58,15 +58,18 @@ form {
     font-weight: bold;
 }
 
-.fila .miniatura {
-    width: 33%;
-    display: none;
-}
-
-.fila .miniatura iframe{
-    width: 100%;
-}
-
 .fila input  {
     width: 66%;
+}
+
+ .fila div label {
+    font-weight: bold;
+ }
+
+ .fila div input {
+    width: 93%;
+ }
+
+.becados {
+    border-bottom: 2px solid green;
 }

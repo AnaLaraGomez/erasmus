@@ -5,10 +5,18 @@ var convocatoriaGlobal;
 var itemsQueSubeAlumno = [];
 // Array que contiene los itemId de los ya subidos.
 var subidos = [];
-
+var candidato;
+var user;
 window.addEventListener("load", function() { 
+    user = JSON.parse(localStorage.getItem('user'));
+    candidato = JSON.parse(localStorage.getItem('candidato'));
     document.getElementById('continuarBtn').style.display = 'none';
     document.getElementById('continuarBtn').addEventListener('click', () => mostrarModalSolicitud());
+
+    if(user == null || user.admin == 1) {
+        document.getElementById('solicitarBtn').style.display = 'none';
+    }
+
     document.getElementById('solicitarBtn').addEventListener('click', () => mostrarModalSolicitud());
     document.getElementById('cerrarSolicitudBtn').addEventListener('click', () => cerrarModalSolicitud());
     document.getElementById('guardarSolicitudBtn').addEventListener('click', () => guardarSolicitud());
@@ -29,15 +37,25 @@ window.addEventListener("load", function() {
         detalleGlobal = detalle;
         itemsQueSubeAlumno =  detalleGlobal.items.filter(itActual => itActual.subeAlumno == 1);
 
-        if(itemsQueSubeAlumno.length == detalle.entregados.length ) {
+        if(detalle.entregados && detalle.entregados.length >= itemsQueSubeAlumno.length ) {
             document.getElementById('solicitarBtn').disabled = 'true';
             document.getElementById('solicitarBtn').innerHTML = 'Solicitada';
             document.getElementById('continuarBtn').style.display = 'none';
-        } else if(detalle.entregados.length > 0)  {
+        } else if(detalle.entregados 
+                && detalle.entregados.length < itemsQueSubeAlumno.length 
+                && detalle.entregados.length > 0 )  {
             document.getElementById('solicitarBtn').style.display = 'none';
             document.getElementById('continuarBtn').style.display = 'inherit';
+        } else if(detalle.entregados == undefined ) {
+            document.getElementById('solicitarBtn').style.display = 'none';
         }
 
+        if(detalle.lista.length == 0) {
+            // Si aun no hay listados provisionales o definitivos,
+            // no pintamos este nodo
+            this.document.getElementById('listadoContenedor').style.display = 'none'
+        }
+        
         pintarConvocatoria();
     });   
 
@@ -59,6 +77,8 @@ window.addEventListener("load", function() {
 
         document.getElementById('a5.inicioPruebas').innerHTML = new Date(convocatoriaGlobal.fechaInicioPruebas).toLocaleString().split(',')[0];
         document.getElementById('a5.finPruebas').innerHTML = new Date(convocatoriaGlobal.fechaFinPruebas).toLocaleString().split(',')[0];
+
+        pintarListado();
     }
 
     function mostrarModalSolicitud() {
@@ -73,8 +93,36 @@ window.addEventListener("load", function() {
         subidos = [];
     }
 
-    function pintarDatosCandidato() {
-     // pendiente de implementar   
+    function pintarDatosCandidato(){
+        document.getElementById('nombre').value = candidato.nombre;
+        document.getElementById('telefono').value = candidato.telefono;
+        document.getElementById('apellidos').value = candidato.apellidos;
+        document.getElementById('fechaNac').value = candidato.fechaNac;
+        document.getElementById('domicilio').value = candidato.domicilio;
+        document.getElementById('dni').value = user.dni;
+        document.getElementById('correo').value = candidato.correo;
+        document.getElementById('curso').value = candidato.curso;
+        mostrarCamposTutor();
+    }
+
+    function mostrarCamposTutor(){
+        let fechaNacimiento = new Date(candidato.fechaNac);
+        let fechaActualMenos18Años = new Date();
+        fechaActualMenos18Años.setFullYear((new Date()).getFullYear() - 18);
+        let elementosTutor = document.getElementById("elementosTutor");
+
+    
+        if(fechaActualMenos18Años.getTime() <= fechaNacimiento.getTime()){
+            document.getElementById('nombreTutor').value = candidato.tutorNombre;
+            document.getElementById('apellidosTutor').value = candidato.tutorApellidos;
+            document.getElementById('dniTutor').value = candidato.tutorDni;
+            document.getElementById('domicilioTutor').value = candidato.tutorDomicilio;
+            document.getElementById('telefonoTutor').value = candidato.tutorTelefono;
+
+            elementosTutor.style.display = "block";
+        } else {
+            elementosTutor.style.display = "none";
+        }
     }
 
     function pintarDatosEntregables() {
@@ -84,7 +132,7 @@ window.addEventListener("load", function() {
         if(itemsQueSubeAlumno.length == subidos.length ) {
             document.getElementById('guardarSolicitudBtn').style.visibility = 'hidden';
         } else {
-            document.getElementById('guardarSolicitudBtn').style.visibility = 'visible';
+            document.getElementById('guardarSolicitudBtn').style.visibility = 'inherit';
         }
 
         let entregables = document.getElementById('entregables');
@@ -99,8 +147,6 @@ window.addEventListener("load", function() {
 
         itemsQueSubeAlumno.forEach(item => {
             let itemEntregado = detalleGlobal.entregados.find(entregadoActual => entregadoActual.itemId == item.itemId)
-            console.log(itemEntregado)
-
             let iDiv = document.createElement('div');
             iDiv.classList.add('entregable');
 
@@ -154,6 +200,43 @@ window.addEventListener("load", function() {
        })
     }
 
+    function pintarListado() {
+        let fechaListaProvisional  = new Date(convocatoriaGlobal.fechaListaProvisional).getTime();
+        let fechaListaDefinitiva  = new Date(convocatoriaGlobal.fechaListaDefinitiva).getTime();
+        let fechaActual = (new Date()).getTime();
+        if(fechaActual < fechaListaProvisional) {
+            return;
+        }else if(fechaListaProvisional < fechaActual && fechaActual < fechaListaDefinitiva ) {
+            // estamos en lista provisional
+            document.getElementById('tipoListado').innerHTML = 'PROVISIONAL';
+        } else if (fechaActual >= fechaListaDefinitiva) {
+            // estamos en lista definitiva
+            document.getElementById('tipoListado').innerHTML = 'DEFINITIVO';
+        }
+
+        detalleGlobal.lista.sort(ordenarPorPuntuacion);
+        let becados = detalleGlobal.lista.slice(0, convocatoriaGlobal.movilidades);
+        let noBecados = detalleGlobal.lista.slice(convocatoriaGlobal.movilidades);
+
+        let listadoBecados = document.getElementById('listadoBecados');
+        becados.forEach( candidato => {
+            let li = document.createElement('li');
+            li.innerHTML= candidato.dni + ' - ' + candidato.puntuacion
+            listadoBecados.appendChild(li)
+        })
+
+        let listadoNoBecados = document.getElementById('listadoNoBecados');
+        noBecados.forEach( candidato => {
+            let li = document.createElement('li');
+            li.innerHTML = candidato.dni + ' - ' + candidato.puntuacion
+            listadoNoBecados.appendChild(li)
+        })
+    }
+
+    function ordenarPorPuntuacion(a,b) {
+        return  b.puntuacion - a.puntuacion // descendente!!
+
+    }
     function guardarSolicitud() {
         enviarFormulario();
     }
@@ -185,7 +268,7 @@ window.addEventListener("load", function() {
         })
         .then((respuestaEnJson) => {
             if(respuestaEnJson.status_code == 201) {
-                console.log(respuestaEnJson.status_code)
+                // refrescamos la pagina
                 this.document.location = this.document.location;
             } else {
                 console.error(respuestaEnJson.msg)

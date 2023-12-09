@@ -81,7 +81,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         Conexion::beginTrasaction();
         // Introducir nuevo usuario en base de datos
         $id = UsuarioRepository::crearUsuario($dni, $password);
-        CandidatoRepository::crearCandidato(new Candidato($id, $nombre, $apellidos, $fechaNac, $curso, $telefono, $correo, $domicilio, $tutorNombre, $tutorApellidos, $tutorDni, $tutorDomicilio, $tutorTelefono));
+        CandidatoRepository::crearCandidato(new Candidato($id, $nombre, $apellidos, $fechaNac, $curso, $telefono, $correo, $domicilio, $nombreTutor, $apellidosTutor, $dniTutor, $domicilioTutor, $telefonoTutor));
         ServicioEmail::enviarEmailBienvenida($correo, $nombre, $apellidos);
         Conexion::commit();
         header("Location: http://localhost/erasmus/interfaz/acceso/login.html");

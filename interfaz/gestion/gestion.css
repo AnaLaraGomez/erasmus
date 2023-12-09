@@ -1,0 +1,69 @@
+.pagina-anidada .fila {
+    justify-content: flex-start;
+}
+
+.estado-pendiente {
+    background-color: orange;
+}
+
+.estado-evaluado {
+    background-color: green;
+}
+
+.estado-pendiente:after {
+    content: "Candidatos pendientes de evaluar";
+}
+
+.estado-evaluado:after {
+    content: "Todos los candidatos han sido evaluados";
+}
+
+.evaluado {
+    background-color: green;
+}
+.evaluado:after {
+    content: "Todas los items han sido evaluados";
+}
+
+.pendiente {
+    background-color: orange;
+}
+.pendiente:after {
+    content: "Falta algún item por evaluar";
+}
+
+.convocatoria  {
+    position: relative;
+    height: 20em;
+    overflow: scroll;
+   }
+
+.convocatoria .fila {
+    background-color: white;
+    position: sticky;
+    top:0;
+    z-index: 10000;
+}
+.convocatoria thead {
+    background-color: white;
+    position: sticky;
+    top: 4em;
+    z-index: 10000;
+}
+
+.fila input, select {
+    width: 16em;
+ }
+
+ .fila div label {
+    
+    font-weight: bold;
+ }
+
+ .fila div input {
+    width: 93%;
+ }
+
+ tr .miniatura {
+    display: block;
+ }

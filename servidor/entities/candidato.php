@@ -16,7 +16,10 @@ class Candidato {
     private $tutorTelefono;
 
     // Constructor
-    function __construct($id, $nombre, $apellidos, $fechaNac, $curso, $telefono, $correo, $domicilio, $tutorNombre, $tutorApellidos, $tutorDni, $tutorDomicilio, $tutorTelefono) {
+    function __construct($id, $nombre, $apellidos, $fechaNac, $curso, 
+                            $telefono, $correo, $domicilio, 
+                            $tutorNombre, $tutorApellidos, $tutorDni, 
+                            $tutorDomicilio, $tutorTelefono) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->apellidos = $apellidos;

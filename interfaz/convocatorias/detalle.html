@@ -85,6 +85,19 @@
                 <li>Una vez resueltas las alegaciones presentadas, se publicará el listado definitivo con los participantes seleccionados y reservas ordenados por puntuación.</li>
             </ul>   
         </div>
+        <div id="listadoContenedor" class="apartado">
+            <h3>LISTADO <span id="tipoListado"></span></h3>
+            <p class="descripcion">
+                A continuación se muestra el listado del total de alumnos que han solicitado beca en esta convocatoria. 
+                Se excluye automáticamente los candidatos que no superaron el corte mínimo en alguno de los baremables solicitados.
+            </p>
+            <p class="descripcion">
+                Sobre la línea divisoria se encuentran aquellos alumnos becados a razon del número de movilidaddes ofrecidas en esta convocatoria ordenado de manera descendente por su puntuación final.
+            </p>
+            <p class="descripcion"> DNI - puntuación</p>
+            <ul class="becados" id="listadoBecados"></ul>
+            <ul id="listadoNoBecados"></ul>
+        </div>
         <div class="contenedor-botones">
             <button id="continuarBtn" class="boton-secundario">Continuar Borrador</button>
             <button id="solicitarBtn" class="boton-primario">Solicitar</button>
@@ -93,14 +106,148 @@
             <div class="modal-contenido">
                 <form id="solicitud" name="solicitud" >
                     
-                    <div class="datos-alumno">
-                        
+                    <div class="information-usuario">
+                        <p class="titulo">Datos del candidato</p>
+                        <div class= "fila" >
+        
+                            <div class="columna">
+                                <div id="grupoNombre">
+                                    <label>Nombre</label>
+                                    <input 
+                                        type="text" 
+                                        id="nombre"
+                                        name="nombre"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoTelefono">
+                                    <label>Número de telefono</label>
+                                    <input 
+                                        type="tel" 
+                                        id="telefono"
+                                        name="telefono"
+                                        readonly
+                                        >
+                                </div>                        
+                            </div>
+                            <div class="columna">
+                                <div id="grupoApellidos">
+                                    <label>Apellidos</label>
+                                    <input 
+                                        type="text" 
+                                        id="apellidos"
+                                        name="apellidos"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoFechaNac">
+                                    <label>Fecha de Nacimiento</label>
+                                    <input 
+                                        type="date" 
+                                        id="fechaNac"
+                                        name="fechaNac"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoDomicilio">
+                                    <label>Domicilio</label>
+                                    <input 
+                                        type="text" 
+                                        id="domicilio"
+                                        name="domicilio"
+                                        readonly
+                                        >
+                                </div>
+                            </div>
+                    
+                            <div class="columna">
+                                <div id="grupoDni">
+                                    <label>DNI</label>
+                                    <input 
+                                        type="text" 
+                                        id="dni"
+                                        name="dni"
+                                        readonly
+                                        >
+                                </div>
+                                
+                                <div id="grupoCorreo">
+                                    <label>Correo electrónico</label>
+                                    <input 
+                                        type="email" 
+                                        id="correo"
+                                        name="correo"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoCurso">
+                                    <label>Curso Matriculado</label>
+                                    <input 
+                                        type="text" 
+                                        id="curso"
+                                        name="curso"
+                                        readonly
+                                        >
+                                </div>
+                            </div>
+                            
+                            <div class="columna" id="elementosTutor">
+                                <div id="grupoNombreTutor">
+                                    <label>Nombre del tutor</label>
+                                    <input 
+                                        type="text" 
+                                        id="nombreTutor"
+                                        name="nombreTutor"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoApellidosTutor">
+                                    <label>Apellidos del tutor</label>
+                                    <input 
+                                        type="text" 
+                                        id="apellidosTutor"
+                                        name="apellidosTutor"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoDniTutor">
+                                    <label>DNI del tutor</label>
+                                    <input 
+                                        type="text" 
+                                        id="dniTutor"
+                                        name="dniTutor"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoDomicilioTutor">
+                                    <label>Domicilio del tutor</label>
+                                    <input 
+                                        type="text" 
+                                        id="domicilioTutor"
+                                        name="domicilioTutor"
+                                        readonly
+                                        >
+                                </div>
+                                <div id="grupoTelefonoTutor">
+                                    <label>Número de telefono del tutor</label>
+                                    <input 
+                                        type="tel" 
+                                        id="telefonoTutor"
+                                        name="telefonoTutor"
+                                        readonly
+                                        >
+                                </div>
+                            </div>    
+                        </div>
                     </div>
+                    
+                    <p class="nota">Si alguno de sus datos personales no es correcto, por favor, contacte con el responsable de gestión
+                        del proyecto Erasmus para su modifciación.
+                    </p>
 
+                    <p class="titulo">Entregables</p>
                     <div id="entregables">
                         <!-- Una entrada por entregable que sube el alumno. Tiene minuatura del PDF que ha subido -->
-
-
                     </div>
 
                     <div class="botones">
@@ -112,9 +259,7 @@
                     </div>
 
                 </form>
-                <p class="nota">Si alguno de sus datos personales no es correcto, por favor, contacte con el responsable de gestión
-                    del proyecto Erasmus para su modifciación.
-                </p>
+               
             </div>
         
         </div>

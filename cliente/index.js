@@ -19,9 +19,11 @@ window.addEventListener("load", function() {
         estaLogueado = true;
         return respuesta.json()
     }).then((user) => {
+        localStorage.setItem('user', JSON.stringify(user))
+
         pintarDatosUsuario(user);
 
-        if(!user.admin) {
+        if(user != null && !user.admin) {
             let url = 'http://localhost/erasmus/servidor/api/apiUsuario.php?candidato';
             fetch(url)
             .then((respuesta) => respuesta.json())
@@ -62,7 +64,6 @@ window.addEventListener("load", function() {
             // Añadir los botones de admin
             pintarBoton('Proyectos', 'interfaz/gestion/proyectos.html',"gestion")
             pintarBoton('Convocatorias', 'servidor/forms/CrearConvocatoria.php',"asda")
-            pintarBoton('Modificar Alumno', 'interfaz/gestion/alumnos.html',"generarExamen")
             pintarBoton('Puntuar', 'interfaz/gestion/puntuar.html',"generarExamen")
         }else {   
             // Añadir los botones de alumno   

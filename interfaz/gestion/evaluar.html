@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/comun.css">
+    <script src="http://localhost/erasmus/cliente/gestion/evaluar.js"></script>
+    <link rel="stylesheet" href="http://localhost/erasmus/interfaz/gestion/gestion.css">
+    <title>Erasmus - Evaluar Candidato</title>
+</head>
+<body>
+    <div class="pagina-anidada">
+        <button id="cerrarIframeBtn">Cerrar PDF</button>
+        <div id="atras">
+            <p>Atras</p>
+        </div>
+        <div id="evaluacionAlumno">
+            <div class="information-usuario">
+                <p class="titulo">Datos del candidato</p>
+                <div class= "fila" >
+
+                    <div class="columna">
+                        <div id="grupoNombre">
+                            <label>Nombre</label>
+                            <input 
+                                type="text" 
+                                id="nombre"
+                                name="nombre"
+                                readonly
+                                >
+                        </div>
+                        <div id="grupoTelefono">
+                            <label>Número de telefono</label>
+                            <input 
+                                type="tel" 
+                                id="telefono"
+                                name="telefono"
+                                >
+                        </div>                        
+                    </div>
+                    <div class="columna">
+                        <div id="grupoApellidos">
+                            <label>Apellidos</label>
+                            <input 
+                                type="text" 
+                                id="apellidos"
+                                name="apellidos"
+                                readonly
+                                >
+                        </div>
+                        <div id="grupoFechaNac">
+                            <label>Fecha de Nacimiento</label>
+                            <input 
+                                type="date" 
+                                id="fechaNac"
+                                name="fechaNac"
+                                readonly
+                                >
+                        </div>
+                        <div id="grupoDomicilio">
+                            <label>Domicilio</label>
+                            <input 
+                                type="text" 
+                                id="domicilio"
+                                name="domicilio"
+                                >
+                        </div>
+                    </div>
+            
+                    <div class="columna">
+                        <div id="grupoDni">
+                            <label>DNI</label>
+                            <input 
+                                type="text" 
+                                id="dni"
+                                name="dni"
+                                readonly
+                                >
+                        </div>
+                        
+                        <div id="grupoCorreo">
+                            <label>Correo electrónico</label>
+                            <input 
+                                type="email" 
+                                id="correo"
+                                name="correo"
+                                >
+                        </div>
+                        <div id="grupoCurso">
+                            <label>Curso Matriculado</label>
+                            <input 
+                                type="text" 
+                                id="curso"
+                                name="curso"
+                                readonly
+                                >
+                        </div>
+                    </div>
+                    
+                    <div class="columna" id="elementosTutor">
+                        <div id="grupoNombreTutor">
+                            <label>Nombre del tutor</label>
+                            <input 
+                                type="text" 
+                                id="nombreTutor"
+                                name="nombreTutor"
+                                readonly
+                                >
+                        </div>
+                        <div id="grupoApellidosTutor">
+                            <label>Apellidos del tutor</label>
+                            <input 
+                                type="text" 
+                                id="apellidosTutor"
+                                name="apellidosTutor"
+                                readonly
+                                >
+                        </div>
+                        <div id="grupoDniTutor">
+                            <label>DNI del tutor</label>
+                            <input 
+                                type="text" 
+                                id="dniTutor"
+                                name="dniTutor"
+                                readonly
+                                >
+                        </div>
+                        <div id="grupoDomicilioTutor">
+                            <label>Domicilio del tutor</label>
+                            <input 
+                                type="text" 
+                                id="domicilioTutor"
+                                name="domicilioTutor"
+                                >
+                        </div>
+                        <div id="grupoTelefonoTutor">
+                            <label>Número de telefono del tutor</label>
+                            <input 
+                                type="tel" 
+                                id="telefonoTutor"
+                                name="telefonoTutor"
+                                >
+                        </div>
+                    </div>    
+                </div>
+            </div>
+
+            <div class="informacion-baremables">
+                <p class="titulo">Baremables</p>
+                <table >
+                    <thead>
+                        <tr>
+                            <th>Miniatura</th>
+                            <th>Infomación</th>
+                            <th>Nota</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baremablesContenedor">
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
