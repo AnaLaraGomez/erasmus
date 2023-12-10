@@ -31,6 +31,7 @@
       
             $detalle['destinatarios'] = array();
             $consultas = Conexion::basedatos()->query("SELECT 
+                d.id as destinatarioId,
                 d.codigo_grupo codigoGrupo, 
                 d.nombre as destinatarioNombre
                 FROM convocatoria c

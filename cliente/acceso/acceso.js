@@ -14,6 +14,7 @@ window.addEventListener("load", function() {
         });
     }
 
+    cargarCursos();
     let fechaNac = document.getElementById("fechaNac");
     if(fechaNac != null) {
         fechaNac.addEventListener('change', (event) =>{
@@ -52,6 +53,23 @@ function login() {
         crearError(grupoPassword,respuestaEnJson['password'])
         crearError(grupoUsuario,respuestaEnJson['usuario2'])
         crearError(grupoPassword,respuestaEnJson['password2'])
+    })
+}
+
+function cargarCursos() {
+    let url = 'http://localhost/erasmus/servidor/api/apiDestinatarios.php';
+    fetch(url)
+    .then((respuesta) => respuesta.json())
+    .then(cursos => pintarCursos(cursos));
+}
+
+function pintarCursos(cursos) {
+    let curso = document.getElementById('curso');
+    cursos.forEach(c => {
+        let option = document.createElement('option');
+        option.value = c.id;
+        option.innerHTML = c.nombre;
+        curso.appendChild(option);
     })
 }
 

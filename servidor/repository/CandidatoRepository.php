@@ -2,14 +2,14 @@
     class CandidatoRepository {
 
         public static function obtenerCandidatoPorId($id) {
-            $consultas = Conexion::basedatos()->query("Select * from candidato where id = $id");
+            $consultas = Conexion::basedatos()->query("Select c.*, d.codigo_grupo, d.nombre as nombre_grupo from candidato c inner join destinatario d on d.id = c.curso where c.id = $id ");
             while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
                  return new Candidato(
                     $resultados->id,
                     $resultados->nombre,
                     $resultados->apellidos,
                     $resultados->fecha_nacimiento,
-                    $resultados->curso,
+                    $resultados->codigo_grupo . ' ' . $resultados->nombre_grupo,
                     $resultados->telefono,
                     $resultados->correo,
                     $resultados->domicilio,

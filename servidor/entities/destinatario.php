@@ -22,5 +22,13 @@ class Destinatario {
     function get_nombre() {
         return $this->nombre;
     }
+
+    function to_json() {
+        return '{' .
+            '"id": ' . $this->id . ',' .
+            '"nombre": "' . $this->codigoGrupo  . ' '. $this->nombre . '"' .
+            '}';
+    }
 }
+
 ?>

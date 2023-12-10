@@ -37,19 +37,9 @@ window.addEventListener("load", function() {
         detalleGlobal = detalle;
         itemsQueSubeAlumno =  detalleGlobal.items.filter(itActual => itActual.subeAlumno == 1);
 
-        if(detalle.entregados && detalle.entregados.length >= itemsQueSubeAlumno.length ) {
-            document.getElementById('solicitarBtn').disabled = 'true';
-            document.getElementById('solicitarBtn').innerHTML = 'Solicitada';
-            document.getElementById('continuarBtn').style.display = 'none';
-        } else if(detalle.entregados 
-                && detalle.entregados.length < itemsQueSubeAlumno.length 
-                && detalle.entregados.length > 0 )  {
-            document.getElementById('solicitarBtn').style.display = 'none';
-            document.getElementById('continuarBtn').style.display = 'inherit';
-        } else if(detalle.entregados == undefined ) {
-            document.getElementById('solicitarBtn').style.display = 'none';
-        }
+        mostrarBotonSolicitarOContinuar();
 
+        // Pintar listas provisionales o definitivas
         if(detalle.lista.length == 0) {
             // Si aun no hay listados provisionales o definitivos,
             // no pintamos este nodo
@@ -61,6 +51,29 @@ window.addEventListener("load", function() {
 
     function atras() {
         document.location = `http://localhost/erasmus/interfaz/convocatorias/tablon.html`
+    }
+
+    function mostrarBotonSolicitarOContinuar() {
+        let cursosPermitidos = detalleGlobal.destinatarios.map(d => d.codigoGrupo + ' ' + d.destinatarioNombre);
+        if(candidato && !cursosPermitidos.includes(candidato.curso)) {
+            // Esta convocatoria no esta disponible para este alumno
+            document.getElementById('solicitarBtn').style.display = 'none';
+            document.getElementById('continuarBtn').style.display = 'none';
+
+        }else if(detalleGlobal.entregados && detalleGlobal.entregados.length >= itemsQueSubeAlumno.length ) {
+            // Ya se ha solicitado
+            document.getElementById('solicitarBtn').disabled = 'true';
+            document.getElementById('solicitarBtn').innerHTML = 'Solicitada';
+            document.getElementById('continuarBtn').style.display = 'none';
+        } else if(detalleGlobal.entregados 
+                && detalleGlobal.entregados.length < itemsQueSubeAlumno.length 
+                && detalleGlobal.entregados.length > 0 )  {
+            // Se ha comenzado a subir archivos pero no se ha terminado
+            document.getElementById('solicitarBtn').style.display = 'none';
+            document.getElementById('continuarBtn').style.display = 'inherit';
+        } else if(detalleGlobal.entregados == undefined ) {
+            document.getElementById('solicitarBtn').style.display = 'none';
+        }
     }
 
     function pintarConvocatoria() {
