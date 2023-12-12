@@ -36,12 +36,10 @@ window.addEventListener("load", function() {
     
     function pintarDatosUsuario(user) {  
         let nombre = document.getElementById('nombre');
-        let foto = document.getElementById('foto');
         let logout = document.getElementById('logout');
         let login = document.getElementById('login');
 
         nombre.style.display = 'inherit';
-        foto.style.display = 'inherit';
         logout.style.display = 'inherit';
         login.style.display = 'none';
 
@@ -58,13 +56,13 @@ window.addEventListener("load", function() {
     
     function pintarBotonesEnHeader(user) {
         // Añadir los botones comunes
-        pintarBoton('Tablón', 'interfaz/convocatorias/tablon.html',"pregunta")
+        pintarBoton('Tablón', 'interfaz/convocatorias/tablon.html',"tablon")
 
         if(user.admin) {
             // Añadir los botones de admin
-            pintarBoton('Proyectos', 'interfaz/gestion/proyectos.html',"gestion")
-            pintarBoton('Convocatorias', 'servidor/forms/CrearConvocatoria.php',"asda")
-            pintarBoton('Puntuar', 'interfaz/gestion/puntuar.html',"generarExamen")
+            pintarBoton('Proyectos', 'interfaz/gestion/proyectos.html',"proyecto")
+            pintarBoton('Convocatorias', 'servidor/forms/CrearConvocatoria.php',"convocatoria")
+            pintarBoton('Puntuar', 'interfaz/gestion/puntuar.html',"puntuar")
         }else {   
             // Añadir los botones de alumno   
         }
@@ -72,12 +70,10 @@ window.addEventListener("load", function() {
 
     function pintarHeaderDeUsuarioAnonimo() {
         let nombre = document.getElementById('nombre');
-        let foto = document.getElementById('foto');
         let logout = document.getElementById('logout');
         let login = document.getElementById('login');
 
         nombre.style.display = 'none';
-        foto.style.display = 'none';
         logout.style.display = 'none';
         login.style.display = 'inherit';
     }
@@ -100,8 +96,6 @@ window.addEventListener("load", function() {
     function pintarPerfilUsuario(user) {
         let nombre = document.getElementById("nombre");
         nombre.innerHTML = user.dni;
-        let foto = document.getElementById("foto");
-        //foto.src = user.foto;
     }
 
     function logout() {

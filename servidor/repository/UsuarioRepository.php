@@ -8,7 +8,8 @@
                     $resultados->id,
                     $resultados->dni,
                     $resultados->password,
-                    $resultados->admin
+                    $resultados->admin,
+                    $resultados->foto,
                 );
             }
         }
@@ -20,8 +21,20 @@
                     $resultados->id,
                     $resultados->dni,
                     $resultados->password,
-                    $resultados->admin
+                    $resultados->admin,
+                    $resultados->foto,
                 );
+            }
+        }
+
+        public static function guardarFoto($id, $foto) {
+            Conexion::basedatos()->exec("UPDATE `usuario`  SET foto = '$foto' where id = $id"); 
+        }
+
+        public static function obtenerFoto($id) {
+            $consultas = Conexion::basedatos()->query("Select foto from usuario where id = '$id'");
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                 return $resultados->foto;
             }
         }
 

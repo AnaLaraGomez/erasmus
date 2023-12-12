@@ -80,6 +80,8 @@ function registrar() {
         method: "POST",
         body: new FormData(formularioAEnviar),
     };
+    // mostrar gif de 'cargando ...'
+    document.getElementById("chiquichiqui").style.display = 'block';
 
     fetch(url, opciones)
     .then((respuesta) => {
@@ -97,6 +99,9 @@ function registrar() {
         }
         return respuesta.json();
     }).then((respuestaEnJson) => {
+        // quitar gif de 'cargando ...'
+        document.getElementById("chiquichiqui").style.display = 'none';
+
         limpiaErrores();
 
         let grupoNombre = document.getElementById("grupoNombre");

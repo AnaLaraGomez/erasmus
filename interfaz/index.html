@@ -16,29 +16,31 @@
 </head>
 <body class="principal">
 
-    <div id="header" class="header">
-        <div id="logo">
-            <!-- logo autoescuela, no depende del usuario-->
-        </div>
-
-        <nav class="menu">
-            <ul id="botones">
-                <!-- Botones que puede acceder el usuario en funcion de su rol -->
-            </ul>
-        </nav>
-
-        <div class="informacion-usuario">
-            <!-- Nombre y foto del usuario-->
-            <div><p id="nombre"></p></div>
-            <div id="foto"></div>
-            <button class="boton-primario" id="logout">Logout</button>
-            <button class="boton-primario" id="login">Entrar</button>
+    <div class="header-contenido">
+        <div id="header" class="header">
+            <div id="logo">
+                <!-- logo autoescuela, no depende del usuario-->
+            </div>
+            <div class="informacion-usuario">
+                <!-- Nombre y foto del usuario-->
+                <div><p id="nombre"></p></div>
+                <button class="boton-primario" id="logout">Logout</button>
+                <button class="boton-primario" id="login">Entrar</button>
+            </div>
+    
+            <nav class="menu">
+                <ul id="botones">
+                    <!-- Botones que puede acceder el usuario en funcion de su rol -->
+                </ul>
+            </nav>
+    
+           
+            
         </div>
         
-    </div>
-    
-    <div id="contenido" class="contenido-iframe">
-        <iframe id="iframe"></iframe>
+        <div id="contenido" class="contenido-iframe">
+            <iframe id="iframe"></iframe>
+        </div>
     </div>
 
     <footer class="pie descripcion">

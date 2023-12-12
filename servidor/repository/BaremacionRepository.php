@@ -24,7 +24,8 @@
             $respuesta = array();
             $consultas =Conexion::basedatos()->query("SELECT 
             u.dni, 
-            sum(b.nota) as puntuacion
+            sum(b.nota) as puntuacion,
+            sum(b.nota < cb.min_requisito) > 0 as excluido
             FROM baremacion b
             inner JOIN convocatoria c on c.id = b.convocatoria_id
             inner JOIN convocatoria_baremo cb on cb.convocatoria_id = b.convocatoria_id and cb.item_id = b.item_id
@@ -32,7 +33,6 @@
             WHERE b.convocatoria_id = $convocatoriaId
             AND c.fecha_lista_provisional <= now()
             GROUP by b.candidato_id
-            HAVING sum(b.nota < cb.min_requisito) = 0 
             order by puntuacion desc");
             while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
                 $entrada = array();

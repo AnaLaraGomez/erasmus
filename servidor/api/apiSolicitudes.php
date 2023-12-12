@@ -4,10 +4,13 @@ require($_SERVER['DOCUMENT_ROOT'].'/erasmus/servidor/autoloader.php');
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $convocatoriaId = $_POST['convocatoriaId'];
+    $foto = $_POST['foto'];
     $user = obtenerUsuarioDeSessionORedireccionarLogin();
 
     $response = array();
     try {
+        UsuarioRepository::guardarFoto($user->get_id(), $foto);
+
         // $key es el id del item
         // $value es el fichero en sí    
         foreach($_FILES as $key => $value) {
@@ -21,6 +24,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($value['tmp_name'],"../../archivos/$nombreAleatorioDelFichero");
             $url = Config::baseUrl() . "/archivos/$nombreAleatorioDelFichero";
             BaremacionRepository::crearActualizarEntregableSolicitudAlumno($convocatoriaId, $user->get_id(), $key, $url);
+        }
+        if($_GET['enviar'] == 'true')  {
+            $candidato = CandidatoRepository::obtenerCandidatoPorId($user->get_id());
+            ServicioEmail::enviarEmailSolicitudConvocatoria($candidato->get_correo(), $candidato->get_nombre(), $candidato->get_apellidos());
         }
         $response['status_code'] = 201; // Created
         echo json_encode($response);

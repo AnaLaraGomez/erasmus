@@ -7,7 +7,18 @@ var itemsQueSubeAlumno = [];
 var subidos = [];
 var candidato;
 var user;
-window.addEventListener("load", function() { 
+var camaraEncendida = false;
+var streamGlobal;
+var chiquichiqui;
+window.addEventListener("load", function() {
+    chiquichiqui = document.getElementById("chiquichiqui");
+    document.getElementById("sacarFotoBtn").style.display = 'none'; 
+    document.getElementById("sacarFotoBtn").addEventListener("click", (ev) => { sacarFoto(ev)});
+    document.getElementById("encenderCamaraBtn").addEventListener("click", (ev) => { encenderCamara(ev); });
+    document.getElementById("apagarCamaraBtn").style.display = 'none'; 
+    document.getElementById("apagarCamaraBtn").addEventListener("click", (ev) => { guardarFoto(ev); });
+    document.getElementById("descargarPdfBtn").addEventListener("click", (ev) => { descargarPdf(ev); });
+    
     user = JSON.parse(localStorage.getItem('user'));
     candidato = JSON.parse(localStorage.getItem('candidato'));
     document.getElementById('continuarBtn').style.display = 'none';
@@ -80,7 +91,7 @@ window.addEventListener("load", function() {
         let destinatariosEnFrase = detalleGlobal.destinatarios.map(actual => actual.codigoGrupo + ' de ' + actual.destinatarioNombre).join(', ');
 
         // Titulo
-        document.getElementById('codigoProyecto').innerHTML = convocatoriaGlobal.proyectoCodigo;
+        document.getElementById('codigoProyecto').innerHTML = convocatoriaGlobal.nombre;
         document.getElementById('proyectoNombre').innerHTML = convocatoriaGlobal.proyectoNombre;
         document.getElementById('a1.1.tipoDur').innerHTML = convocatoriaGlobal.largaDuracion ? 'larga' : 'corta';
         document.getElementById('a1.2.des').innerHTML = destinatariosEnFrase
@@ -104,9 +115,15 @@ window.addEventListener("load", function() {
     function cerrarModalSolicitud() {
         document.getElementById('modalSolicitud').style.visibility = 'hidden';
         subidos = [];
+        apagarCamara();
     }
 
     function pintarDatosCandidato(){
+        if(detalleGlobal.foto != null ) {
+            document.getElementById('photo').src = detalleGlobal.foto;
+        }
+        
+        document.getElementById('foto').value = detalleGlobal.foto;
         document.getElementById('nombre').value = candidato.nombre;
         document.getElementById('telefono').value = candidato.telefono;
         document.getElementById('apellidos').value = candidato.apellidos;
@@ -250,20 +267,21 @@ window.addEventListener("load", function() {
         return  b.puntuacion - a.puntuacion // descendente!!
 
     }
+
     function guardarSolicitud() {
         enviarFormulario();
     }
 
     function eviarSolicitud(e) {
         e.preventDefault();
-        // Validaciones  en JS
         if(e.target.valido()){
-            enviarFormulario();
+            enviarFormulario(true);
         }
     }
 
-    function enviarFormulario() {
-        let url = `http://localhost/erasmus/servidor/api/apiSolicitudes.php`;
+    function enviarFormulario(esFinal = false) {
+        chiquichiqui.style.display = 'block';
+        let url = `http://localhost/erasmus/servidor/api/apiSolicitudes.php?enviar=${esFinal}`;
         let formularioAEnviar = document.getElementById("solicitud");
     
         let opciones = {
@@ -286,6 +304,75 @@ window.addEventListener("load", function() {
             } else {
                 console.error(respuestaEnJson.msg)
             }
+            chiquichiqui.style.display = 'none';
         });
     }
+
+    function apagarCamara() {
+        if(streamGlobal) {
+            streamGlobal.getTracks().forEach(function(track) {
+                track.stop();
+              });  
+        }
+        document.getElementById("encenderCamaraBtn").style.display = 'block';
+        document.getElementById("sacarFotoBtn").style.display = 'none';
+        document.getElementById("apagarCamaraBtn").style.display = 'none'; 
+
+        let video = document.getElementById("video");
+        video.setAttribute("width", 0);
+        video.setAttribute("height", 0);
+
+    }
+
+    function encenderCamara() {
+        document.getElementById("sacarFotoBtn").style.display = 'block';
+        document.getElementById("apagarCamaraBtn").style.display = 'block'; 
+        document.getElementById("encenderCamaraBtn").style.display = 'none';
+        let video = document.getElementById("video");
+        
+        let width = 200;
+        let height = 0;
+        let opcionesCamara = {
+            video: true,
+            audio: false,
+        };
+      
+        navigator.mediaDevices.getUserMedia(opcionesCamara)
+        .then(stream => {
+            video.srcObject=stream;
+            video.play();
+            height = video.videoHeight / (video.videoWidth / width);
+            video.setAttribute("width", width);
+            video.setAttribute("height", height);
+            streamGlobal = stream;
+        });
+        
+    }
+
+    function sacarFoto(e) {
+        e.preventDefault();
+        let video = document.getElementById("video");
+        let canvas = document.createElement("canvas");
+        let photo = document.getElementById("photo");
+        let foto  = document.getElementById("foto");
+        let width = 200;
+        let height = video.videoHeight / (video.videoWidth / width);
+        canvas.setAttribute("width", width);
+        canvas.setAttribute("height", height);
+        
+        canvas.getContext("2d").drawImage(video, 0, 0, width, height);
+        let data = canvas.toDataURL("image/png");
+        photo.setAttribute("src", data);
+        foto.value = data;
+    }
+
+    function guardarFoto(e) {
+        e.preventDefault();
+        apagarCamara(); 
+    }
+
+    function descargarPdf() {
+        window.open(`http://localhost/erasmus/servidor/api/apiPdf.php?convocatoriaId=${convocatoriaGlobal.id}`, "_blank");
+    }
+
 })

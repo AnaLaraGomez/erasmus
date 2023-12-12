@@ -6,10 +6,40 @@ if($user->get_admin() != 1) {
     exit;
 }
 
+$convocatoriaId = $_GET['convocatoriaId'];
+if(empty($convocatoriaId )) {
+    exit;
+}
+
+
 $proyectos = ProyectoRepository::obtenerProyectos();
 $destinatarios = DestinatarioRepository::obtenerDestinatarios();
-$idiomas = IdiomasRepository::obtenerIdiomas();
 $items = ItemsRepository::obtenerItems();
+
+$convocatoriaAEditar = ConvocatoriaRepository::obtenerConvocatoriaPorId($convocatoriaId);
+$detalleConvocatoriaAEditar = ConvocatoriaRepository::obtenerConvocatoriaDetalle($convocatoriaId);
+
+$destinatariosConvocatoriaAEditarIds = array();
+
+foreach($detalleConvocatoriaAEditar['destinatarios']as $d) {
+    $destinatariosConvocatoriaAEditarIds[] = $d->destinatarioId;
+}
+
+$itemsConvocatoriaAEditarIds = array();
+foreach($detalleConvocatoriaAEditar['items']as $i) {
+    $itemsConvocatoriaAEditarIds[] = $i->itemId;
+}
+
+$proyectoId = $convocatoriaAEditar->get_proyectoId();
+$nombre = $convocatoriaAEditar->get_nombre();
+$movilidades =  $convocatoriaAEditar->get_movilidades();
+$largaDuracion =  $convocatoriaAEditar->get_largaDuracion();
+$fechaInicioSolicitudes =  $convocatoriaAEditar->get_fechaInicioSolicitudes();
+$fechaFinSolicitudes =  $convocatoriaAEditar->get_fechaFinSolicitudes();
+$fechaInicioPruebas =  $convocatoriaAEditar->get_fechaInicioPruebas();
+$fechaFinPruebas =  $convocatoriaAEditar->get_fechaFinPruebas();
+$fechaListaProvisional =  $convocatoriaAEditar->get_fechaListaProvisional();
+$fechaListaDefinitiva =  $convocatoriaAEditar->get_fechaListaDefinitiva();
 
 $errores = array();
 
@@ -73,42 +103,55 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Esta todo validado, creamos transaccion y empezamos a guardar cosas en la base de datos
         try {
             Conexion::beginTrasaction();
+            // Queries de update            
+            $convocatoriaObj = new Convocatoria($convocatoriaId, $movilidades, $largaDuracion, 
+            $fechaInicioSolicitudes, $fechaFinSolicitudes, 
+            $fechaInicioPruebas, $fechaFinPruebas, $fechaListaProvisional, 
+            $fechaListaDefinitiva, $proyectoId, $descripcion, $nombre);
 
-            // Introducir cosicas en base de datos
-            // Crear convocatoria
-            $convocatoriaObj = new Convocatoria(null, $movilidades, $largaDuracion, 
-                $fechaInicioSolicitudes, $fechaFinSolicitudes, 
-                $fechaInicioPruebas, $fechaFinPruebas, $fechaListaProvisional, 
-                $fechaListaDefinitiva, $proyectoId, $descripcion, $nombre);
-            $convocatoriaId = ConvocatoriaRepository::crearConvocatoria($convocatoriaObj);
-            
+            ConvocatoriaRepository::actualizarConvocatoria($convocatoriaObj);
 
-            // Añadir destinatarios
+            // Eliminamos los destinatarios
+            ConvocatoriaRepository::limpiarDestinatariosDeConvocatoria($convocatoriaId);
+            // y los añadimos de nuevo
             foreach($destinatariosPosteados as $destinatarioActual) {
                 ConvocatoriaRepository::añadirDestinatarioAConvocatoria($convocatoriaId, $destinatarioActual);
             }
 
-            // Añadir idiomas
+            // Actualizar idiomas
             foreach($idiomasPosteados as $key => $value) {
                 ConvocatoriaRepository::añadirBaremoIdiomaAConvocatoria($convocatoriaId, $key, $value);
             }
 
-            // Añadir items
+            // Eliminamos los items 
+            ConvocatoriaRepository::limpiarItemsDeConvocatoria($convocatoriaId);
+            // Añadir de nuevo 
             foreach($itemsPosteados as $key => $value) {
-                $puntuacionMax = $value['itemMax'];
-                $requisito = empty($value['itemRequisito']) ? 0 : 1;
-                $minRequisito = $value['itemMin'];
-                ConvocatoriaRepository::añadirBaremoItemAConvocatoria($convocatoriaId,$key,$puntuacionMax, $requisito, $minRequisito);
+                if(isset($value['itemEvaluable'])) {
+                    $puntuacionMax = $value['itemMax'];
+                    $requisito = empty($value['itemRequisito']) ? 0 : 1;
+                    $minRequisito = $value['itemMin'];
+                    ConvocatoriaRepository::añadirBaremoItemAConvocatoria($convocatoriaId,$key,$puntuacionMax, $requisito, $minRequisito);
+                }
             }
 
             Conexion::commit();
-            header("Location: http://localhost/erasmus/servidor/forms/CrearConvocatoria.php?exito");
+            header('Location: http://localhost/erasmus/servidor/forms/EditarConvocatoria.php?convocatoriaId=' . $convocatoriaId . '&exito');
             exit();
         } catch(Throwable | Error $e) { // Fuente: https://www.php.net/manual/en/class.throwable.php
             // Ups! algo ha ido mal, vamos a revertir los cambios de DB
             Conexion::rollback();
         }        
     }
+}
+
+function itemPorId($itemIdDeseado, $arrayItems) {
+    foreach($arrayItems as $item) {
+        if($item->itemId ==$itemIdDeseado) {
+            return $item;
+        }
+    }
+    return null;
 }
 
 ?>
@@ -120,6 +163,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://localhost/erasmus/interfaz/comun.css">
     <link rel="stylesheet" href="http://localhost/erasmus/interfaz/gestion/gestion.css">
+    <title>Editar Convocatoria</title>
     <script>
         window.addEventListener("load", function() {
             let itemsEvaluables = document.getElementsByClassName('itemEvaluable');
@@ -142,13 +186,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         });
     </script>
-    <title>Crear Convocatoria</title>
 </head>
 <body>
     <div class="pagina-anidada">
-        <p class="titulo-principal">Crear Convocatoria</p>
-        <p class="exito"><?php echo(isset($_GET['exito'])?'Se ha creado la convocatoria':"") ?> </p>
-        <form id='convocatoriaFormulario' action="<?php echo $_SERVER['PHP_SELF']?>" method="POST" >
+        <p class="titulo-principal">Editar Convocatoria</p>
+        <p class="exito"><?php echo(isset($_GET['exito'])?'Se ha actualizado la convocatoria':"") ?> </p>
+
+        <form id='convocatoriaFormulario' action="<?php echo $_SERVER['PHP_SELF'] . '?convocatoriaId=' . $convocatoriaId?>" method="POST" >
             <div class="fila">
                 <div class="conjunto">
                     <label>Nombre</label>
@@ -173,7 +217,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="conjunto">
                     <label>Movilidades</label>
-                    <input type="number" min='1' name="movilidades" value='<?php echo $movilidades?>' onKeyDown="return false" />
+                    <input type="number" 
+                    min='1' 
+                    name="movilidades" 
+                    onKeyDown="return false"
+                    value='<?php echo $movilidades?>' />
                     <?php echo((!empty($errores['movilidades']) ? '<p class="error">'. $errores['movilidades'] .'</p>' : '') ) ?>
                 </div>
                 <div class="conjunto">
@@ -205,9 +253,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td><input
                                     class="itemEvaluable" 
                                     type="checkbox"
+                                    <?php echo (in_array($item->get_id(), $itemsConvocatoriaAEditarIds) ? 'checked' : '' )?>
                                     name='itemEvaluable-<?php echo $item->get_id() ?>'
                                     id='itemEvaluable-<?php echo $item->get_id() ?>'
                                     /></td>
+
                                 <td><?php echo $item->get_nombre() ?></td>
                                 <td><input 
                                     type="number"
@@ -215,28 +265,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     max='10'
                                     name='itemMin-<?php echo $item->get_id() ?>' 
                                     id='itemMin-<?php echo $item->get_id() ?>' 
-                                    disabled
                                     onKeyDown="return false"
-                                    value='<?php echo $_POST['itemMin-'.$item->get_id()] ?>'
+                                    <?php echo (in_array($item->get_id(), $itemsConvocatoriaAEditarIds) ? '' : 'disabled' )?>
+                                    value='<?php echo itemPorId($item->get_id(), $detalleConvocatoriaAEditar['items'])->notaMin ?>'
                                     <?php echo((empty($errores['itemMin-'.$item->get_id()]) ? '' : 'class="error-input"'))?>/></td>
                                 <td><input 
                                     type="number"
                                     min='0' 
                                     max='10'
                                     name='itemMax-<?php echo $item->get_id() ?>' 
-                                    id='itemMax-<?php echo $item->get_id() ?>' 
-                                    disabled
-                                    onKeyDown="return false"
-                                    value='<?php echo $_POST['itemMax-'.$item->get_id()] ?>'
+                                    id='itemMax-<?php echo $item->get_id() ?>'
+                                    onKeyDown="return false" 
+                                    <?php echo (in_array($item->get_id(), $itemsConvocatoriaAEditarIds) ? '' : 'disabled' )?>
+                                    value='<?php echo itemPorId($item->get_id(), $detalleConvocatoriaAEditar['items'])->notaMax ?>'
                                     <?php echo((empty($errores['itemMax-'.$item->get_id()]) ? '' : 'class="error-input"'))?>/></td>
                                 <td><input 
                                     type="checkbox"
-                                    <?php echo (empty($_POST['itemRequisito-'.$item->get_id()]) ? '' : 'checked' )?>
+                                    <?php echo (itemPorId($item->get_id(), $detalleConvocatoriaAEditar['items'])->requisito == 0 ? '' : 'checked' )?>
+                                    <?php echo (in_array($item->get_id(), $itemsConvocatoriaAEditarIds) ? '' : 'disabled' )?>
                                     name='itemRequisito-<?php echo $item->get_id() ?>'
                                     id='itemRequisito-<?php echo $item->get_id() ?>'
-                                    disabled
                                     /></td>
-                                <td><p class="descripcion"> <?php echo($item->get_subeAlumno() == 0 ? 'profesor' : 'alumno') ?></p></td>
+                                <td><p class="descripcion"> <?php echo(itemPorId($item->get_id(), $detalleConvocatoriaAEditar['items'])->subeAlumno == 0 ? 'profesor' : 'alumno') ?></p></td>
                             </tr>
                             <?php
                         }
@@ -249,25 +299,25 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <table>
                         <tr>
                             <?php
-                            foreach ($idiomas as $idioma) {
+                            foreach ($detalleConvocatoriaAEditar['idiomas'] as $idioma) {
                                 ?>
-                                    <th><?php echo($idioma->get_nivel()) ?></th>
+                                    <th><?php echo($idioma->idioma) ?></th>
                                 <?php
                             }
                             ?>
                         </tr>
                         <tr>
                             <?php
-                            foreach ($idiomas as $idioma) {
+                            foreach ($detalleConvocatoriaAEditar['idiomas'] as $idioma) {
                             ?>
                                 <td><input 
                                     type="number" 
                                     min='0' 
                                     max='10' 
-                                    name='idiomaPuntuacion-<?php echo $idioma->get_id() ?>' 
-                                    value='<?php echo $_POST['idiomaPuntuacion-'.$idioma->get_id()] ?>'
-                                    <?php echo((empty($errores['idiomaPuntuacion-'.$idioma->get_id()]) ? '' : 'class="error-input"'))?> 
-                                    onKeyDown="return false"/> </td>
+                                    name='idiomaPuntuacion-<?php echo $idioma->id ?>'
+                                    onKeyDown="return false" 
+                                    value='<?php echo $idioma->puntuacion ?>'
+                                    <?php echo((empty($errores['idiomaPuntuacion-'.$idioma->id]) ? '' : 'class="error-input"'))?>/></td>
                             <?php
                             }
                             ?>
@@ -285,7 +335,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input 
                                         type="checkbox" 
                                         class="checkbox"
-                                        <?php echo (empty($_POST['destinatario-'.$destinatario->get_id()]) ? '' : 'checked' )?>
+                                        <?php echo (in_array($destinatario->get_id(), $destinatariosConvocatoriaAEditarIds)  ? 'checked' : '' )?>
                                         name='destinatario-<?php echo $destinatario->get_id() ?>' 
                                     /><span>
                                         <?php echo $destinatario->get_codigoGrupo() . ' ' . $destinatario->get_nombre() ?>
@@ -368,7 +418,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="fila">
-                <button class="boton-primario">Crear</button>
+                <button class="boton-primario">Actualizar</button>
             </div>
 
         </form>

@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
         if(Session::estaLogueado()) {
             $user = Session::leerDatosSession();
             $detalle['entregados'] = ConvocatoriaRepository::obtenerConvocatoriaBaremablesAlumno($convocatoriaId, $user->get_id());
+            $detalle['foto'] = UsuarioRepository::obtenerFoto($user->get_id());
         }
         echo json_encode($detalle);
         return;
@@ -22,7 +23,15 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
     $tusConvocatorias = array();
 
     if(Session::estaLogueado()) {
-        //$tusConvocatorias  se rellenana aqui 
+        $user = Session::leerDatosSession();
+        if($user->get_admin() == 1) {
+            // es admin
+            $tusConvocatorias = ConvocatoriaRepository::obtenerConvocatoriasInactivas();
+
+        } else  {
+            // es alumno
+            $tusConvocatorias = ConvocatoriaRepository::obtenerConvocatoriasSolicitadas($user->get_id());
+        }
     }
 
     // Usuario anonimo. Recibe todas las Convocatorias abiertas

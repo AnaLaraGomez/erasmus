@@ -1,4 +1,6 @@
 <?php
+require($_SERVER['DOCUMENT_ROOT'].'/erasmus/servidor/vendor/autoload.php');
+
     class Autoloader
     {
         public static function load()

@@ -5,7 +5,7 @@ body {
 
 input, textarea, select, datalist {
     padding: 0.75em;
-    border: 1px solid rgb(229 221 210 / 34%);
+    border: 1px solid rgb(229 221 210 / 50%);
     border-radius: 0.5em;
 }
 
@@ -93,7 +93,7 @@ input, textarea, select, datalist {
 
 .boton-primario {
     cursor: pointer;
-    background-color: rgb(229 221 210 / 34%);
+    background-color: rgb(229 221 210 / 50%);
     border: 2px solid rgb(229 221 210);
     border-radius: 0.5em;
     color: black;
@@ -161,6 +161,12 @@ input, textarea, select, datalist {
     border-radius: 0.5em;
     width: 75%;
     min-height: 50%;
+    max-height: 100%;
+    overflow: scroll;
+}
+.titulo-principal {
+    font-size: x-large;
+    font-weight: bold;
 }
 .titulo {
     font-size: large;
@@ -238,7 +244,7 @@ table {
 }
 
 tr:nth-child(even) { 
-    background-color: rgb(229 221 210 / 34%); 
+    background-color: rgb(229 221 210 / 50%); 
 }
 
 .tablas {
@@ -303,6 +309,7 @@ tr:nth-child(even) {
     width: 0.5em;
     position: relative;
     display: inline-block;
+    height: 80px;
 }
 
 .estado:after {
@@ -330,4 +337,27 @@ tr:nth-child(even) {
 
 .miniatura iframe{
     width: 100%;
+}
+
+#atras {
+    background-image: url('http://localhost/erasmus/interfaz/images/atras.png');
+    background-repeat: no-repeat;
+    border: none;
+    background-size: 60px 65px;
+    height: 60px;
+    width: 60px;
+}
+
+#chiquichiqui {
+    display: none;
+    position: absolute;
+    z-index: 100000000;
+    background-image: url('http://localhost/erasmus/interfaz/images/chiquichiqui.gif');
+    background-size: 16em 16em;
+    background-position: center;
+    background-repeat: no-repeat;
+    top:0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }

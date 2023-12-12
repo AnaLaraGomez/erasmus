@@ -15,7 +15,6 @@
 <body>
     <div id="detalle" class="pagina-anidada">
         <div id="atras">
-            <p>Atras</p>
         </div>
 
         <div class="cabecera">
@@ -98,13 +97,32 @@
             <ul class="becados" id="listadoBecados"></ul>
             <ul id="listadoNoBecados"></ul>
         </div>
+
         <div class="contenedor-botones">
+            <button id="descargarPdfBtn" class="boton-primario">Descargar en PDF</button>
             <button id="continuarBtn" class="boton-secundario">Continuar Borrador</button>
             <button id="solicitarBtn" class="boton-primario">Solicitar</button>
         </div>
         <div id="modalSolicitud" class="modal">
             <div class="modal-contenido">
+
                 <form id="solicitud" name="solicitud" >
+                    <!-- Fuente: https://developer.mozilla.org/es/docs/Web/API/Media_Capture_and_Streams_API/Taking_still_photos -->
+                    <div class="fotoContenedor">
+                        <div class="camara">
+                            
+                            <video id="video"></video>
+                            <div class="camara-botones">
+                                <button id="encenderCamaraBtn" class="boton-primario">Encender cámara</button>
+                                <button id="sacarFotoBtn" class="boton-primario">Sacar foto</button>
+                                <button id="apagarCamaraBtn" class="boton-secundario">Apagar cámara</button>
+                            </div>
+                        </div>
+                        <div class="foto">
+                            <img id="photo" src="http://localhost/erasmus/interfaz/images/anonimo.png" alt="photo" />
+                            <input id="foto" hidden name="foto" data-valida="relleno" />
+                        </div>
+                    </div>
                     
                     <div class="information-usuario">
                         <p class="titulo">Datos del candidato</p>
@@ -259,10 +277,11 @@
                     </div>
 
                 </form>
-               
             </div>
         
         </div>
+        <div id="chiquichiqui"></div>
+
     </div>
 
 </body>

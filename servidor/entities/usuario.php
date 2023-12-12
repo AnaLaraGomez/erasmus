@@ -4,13 +4,15 @@ class Usuario {
     private $dni;
     private $password;
     private $admin;
+    private $foto;
 
     // Constructor
-    function __construct($id, $dni, $password, $admin){
+    function __construct($id, $dni, $password, $admin, $foto){
         $this->id = $id;
         $this->dni = $dni;
         $this->password = $password;
         $this->admin = $admin;
+        $this->foto = $foto;
     }
 
     // Methods
@@ -38,11 +40,16 @@ class Usuario {
         $this->admin = $admin;
     }
 
+    function get_foto() {
+        $this->foto;
+    }
+
     function to_json() {
         return '{'.
             '"id":' . $this->id . ',' .
             '"dni": "' . $this->dni . '",' .
-            '"admin":' . ($this->admin == 1 ? 'true' : 'false') .
+            '"admin":' . ($this->admin == 1 ? 'true' : 'false') . ',' .
+            '"foto":"' . $this->foto . '"' .
             '}';
     }
 }

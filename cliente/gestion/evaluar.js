@@ -39,6 +39,7 @@ window.addEventListener("load", function() {
     }
 
     function pintarEvaluacionAlumno(){
+        document.getElementById('foto').src = usuario.foto;
         document.getElementById('nombre').value = candidato.nombre;
         document.getElementById('telefono').value = candidato.telefono;
         document.getElementById('apellidos').value = candidato.apellidos;
@@ -92,7 +93,7 @@ window.addEventListener("load", function() {
             miniatura.innerHTML= '';
             miniatura.style.display = 'inherit';
             let maxMiniatura = document.createElement('button');
-            maxMiniatura.innerHTML = '+'
+            maxMiniatura.classList.add('lupa-btn');
             maxMiniatura.addEventListener('click', (e) => maximizarPdf(iframe))
             miniatura.append(iframe);
             miniatura.append(maxMiniatura);
@@ -125,6 +126,8 @@ window.addEventListener("load", function() {
         notaInput.type = 'number';
         notaInput.name = 'nota';
         notaInput.max = baremable.notaMax;
+        notaInput.setAttribute('onKeyDown', "return false");
+        notaInput.setAttribute('data-valida', "relleno");
         notaInput.min = 0;
         if(baremable.itemNota != null) {
             notaInput.value = baremable.itemNota;
@@ -137,12 +140,6 @@ window.addEventListener("load", function() {
 
         let acciones = document.createElement('td');
         
-        let guardarBtn = document.createElement('button');
-        guardarBtn.innerHTML = 'Guardar Nota'
-        guardarBtn.setAttribute('form', formId);
-        guardarBtn.addEventListener('click', (e)=> enviarFormulario(e))
-
-        acciones.appendChild(guardarBtn);
 
         if(baremable.subeAlumno == 0) {
             let seleccionarFichero = document.createElement('input');
@@ -150,6 +147,8 @@ window.addEventListener("load", function() {
             seleccionarFichero.accept="application/pdf"; // solo te deja elegir PDF
             seleccionarFichero.name = 'fichero';
             seleccionarFichero.setAttribute('form', formId);
+            seleccionarFichero.setAttribute('data-valida', 'ficheroSubidoOSeleccionado');
+            seleccionarFichero.setAttribute('data-subido', baremable.itemUrl != null);
             seleccionarFichero.addEventListener('change', (e)=> {
                 if(e.target.files.length == 1 && e.target.files[0].type=="application/pdf") {
                     e.target.classList.remove('error-input');
@@ -159,7 +158,7 @@ window.addEventListener("load", function() {
                     miniatura.style.display = 'inherit';
                     miniatura.append(iframe);
                     let maxMiniatura = document.createElement('button');
-                    maxMiniatura.innerHTML = '+'
+                    maxMiniatura.classList.add('lupa-btn');
                     maxMiniatura.addEventListener('click', (e) => maximizarPdf(iframe))
                     miniatura.append(iframe);
                     miniatura.append(maxMiniatura);
@@ -168,6 +167,15 @@ window.addEventListener("load", function() {
             acciones.appendChild(seleccionarFichero);
         }
 
+
+        let guardarBtn = document.createElement('button');
+        guardarBtn.innerHTML = 'Guardar Nota'
+        guardarBtn.classList.add('boton-secundario');
+        guardarBtn.setAttribute('form', formId);
+        guardarBtn.addEventListener('click', (e)=> enviarFormulario(e))
+
+        acciones.appendChild(guardarBtn);
+
         fila.appendChild(acciones);
 
         return fila;
@@ -175,8 +183,14 @@ window.addEventListener("load", function() {
 
     function enviarFormulario(e) {
         e.preventDefault();
+
         const formData = new FormData();
         let formId = e.target.getAttribute('form');
+
+        if(!document.getElementById(formId).validoConFormDistribuido(formId)) {
+            return;
+        }
+
         // Como los elementos del form estan distribuidos a traves de los
         // diferentes td, necesitamos usar el selector de forms['form-name]
         let elements = document.forms[formId].elements;

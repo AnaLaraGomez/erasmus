@@ -5,17 +5,16 @@ body {
     justify-content: center;
     align-items: center;
 
-    background-image: url('http://localhost/erasmus/interfaz/images/logo.png');
+    background-image: url('http://localhost/erasmus/interfaz/images/logo-largo.png');
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: 2em;
-    background-size: 25em 8em;
-    background-color: rgba(103, 166, 179,0.1);
+    background-size: 32em 8em;
 }
 
 form {
-    background-color: white;
-    border: 2px solid rgb(223, 129, 42);;
+    background-color: rgb(229 221 210 / 50%);;
+    border: 1px solid lightgrey;
     padding: 1.75em;
     min-width: 33%;
     max-width: 90%;

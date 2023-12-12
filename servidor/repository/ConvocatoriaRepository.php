@@ -26,6 +26,59 @@
             return $convocatorias;
         }
 
+        public static function  obtenerConvocatoriasInactivas() {
+            $consultas = Conexion::basedatos()->query("SELECT c.*, p.nombre as proyecto_nombre from convocatoria c
+            inner join proyecto p on p.id = c.proyecto_id
+            where fecha_inicio_solicitudes > NOW();");
+            $convocatorias = array();
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $convocatorias[] = new Convocatoria(
+                    $resultados->id,
+                    $resultados->movilidades,
+                    $resultados->larga_duracion,
+                    $resultados->fecha_inicio_solicitudes,
+                    $resultados->fecha_fin_solicitudes,
+                    $resultados->fecha_inicio_pruebas,
+                    $resultados->fecha_fin_pruebas,
+                    $resultados->fecha_lista_provisional,
+                    $resultados->fecha_lista_definitiva,
+                    $resultados->proyecto_id,
+                    $resultados->descripcion,
+                    $resultados->nombre,
+                    $resultados->proyecto_nombre
+                );
+            }
+            return $convocatorias;
+        }
+
+        public static function  obtenerConvocatoriasSolicitadas($candidatoId) {
+            $consultas = Conexion::basedatos()->query("SELECT c.*, p.nombre as proyecto_nombre from convocatoria c
+            inner join proyecto p on p.id = c.proyecto_id
+            inner join baremacion b on b.convocatoria_id = c.id
+            where fecha_inicio_solicitudes <=  NOW()
+            and b.candidato_id = $candidatoId
+            GROUP by b.convocatoria_id;");
+            $convocatorias = array();
+            while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
+                $convocatorias[] = new Convocatoria(
+                    $resultados->id,
+                    $resultados->movilidades,
+                    $resultados->larga_duracion,
+                    $resultados->fecha_inicio_solicitudes,
+                    $resultados->fecha_fin_solicitudes,
+                    $resultados->fecha_inicio_pruebas,
+                    $resultados->fecha_fin_pruebas,
+                    $resultados->fecha_lista_provisional,
+                    $resultados->fecha_lista_definitiva,
+                    $resultados->proyecto_id,
+                    $resultados->descripcion,
+                    $resultados->nombre,
+                    $resultados->proyecto_nombre
+                );
+            }
+            return $convocatorias;
+        }
+
         public static function obtenerConvocatoriaDetalle($id) {
             $detalle = array();
       
@@ -44,6 +97,7 @@
 
             $detalle['idiomas'] = array();
             $consultas = Conexion::basedatos()->query("SELECT 
+                i.id as id,
                 i.nivel as idioma,
                 cbi.puntuacion as puntuacion
                 FROM convocatoria c
@@ -143,7 +197,7 @@
                 c.*, p.nombre as proyecto_nombre 
                 from convocatoria c
                 inner join proyecto p on p.id = c.proyecto_id
-                where fecha_inicio_pruebas >= NOW() 
+                where fecha_inicio_pruebas <= NOW() 
                 AND fecha_lista_definitiva >= NOW() ");
             while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
                 $convocatoriaArray = array();
@@ -215,15 +269,23 @@
             Conexion::basedatos()->exec("INSERT INTO `destinatario_convocatoria` (convocatoria_id, destinatario_id) VALUES ($convocatoriaId, $destinatarioId)");
         }
 
+        public static function limpiarDestinatariosDeConvocatoria($convocatoriaId) {
+            Conexion::basedatos()->exec("DELETE FROM `destinatario_convocatoria` WHERE convocatoria_id = $convocatoriaId");
+        }
+
         public static function añadirBaremoIdiomaAConvocatoria($convocatoriaId, $idiomaId, $puntuacion) {
-            Conexion::basedatos()->exec("INSERT INTO `convocatoria_baremo_idioma` (convocatoria_id, idioma_id, puntuacion) VALUES ($convocatoriaId, $idiomaId, $puntuacion)");
+            Conexion::basedatos()->exec("INSERT INTO `convocatoria_baremo_idioma` (convocatoria_id, idioma_id, puntuacion) 
+                                        VALUES ($convocatoriaId, $idiomaId, $puntuacion)
+                                        ON DUPLICATE KEY UPDATE `puntuacion`= '$puntuacion' ");
         }
         
         public static function añadirBaremoItemAConvocatoria($convocatoriaId, $itemId, $puntuacionMax, $requisito, $minRequisito) {
-            echo("INSERT INTO `convocatoria_baremo` (convocatoria_id, item_id, puntuacion_max, requisito, min_requisito) 
-            VALUES ($convocatoriaId, $itemId, $puntuacionMax, $requisito, $minRequisito)");
             Conexion::basedatos()->exec("INSERT INTO `convocatoria_baremo` (convocatoria_id, item_id, puntuacion_max, requisito, min_requisito) 
                 VALUES ($convocatoriaId, $itemId, $puntuacionMax, $requisito, $minRequisito)");
+        }
+
+        public static function limpiarItemsDeConvocatoria($convocatoriaId) {
+            Conexion::basedatos()->exec("DELETE FROM `convocatoria_baremo` WHERE convocatoria_id = $convocatoriaId");
         }
 
         public static function actualizarConvocatoria($convocatoria) {
@@ -237,8 +299,20 @@
             $fechaListaProvisional = $convocatoria->get_fechaListaProvisional();
             $fechaListaDefinitiva = $convocatoria->get_fechaListaDefinitiva();
             $proyectoId = $convocatoria->get_proyectoId();
+            $nombre = $convocatoria->get_nombre();
 
-            //falta query
+            Conexion::basedatos()->exec(" UPDATE `convocatoria`  SET 
+                movilidades = $movilidades, 
+                larga_duracion = $largaDuracion, 
+                fecha_inicio_solicitudes = '$fechaInicioSolicitudes', 
+                fecha_fin_solicitudes = '$fechaFinSolicitudes', 
+                fecha_inicio_pruebas = '$fechaInicioPruebas', 
+                fecha_fin_pruebas = '$fechaFinPruebas', 
+                fecha_lista_provisional = '$fechaListaProvisional', 
+                fecha_lista_definitiva = '$fechaListaDefinitiva', 
+                proyecto_id = $proyectoId,
+                nombre = '$nombre'
+                WHERE id = $id");
         }
 
     }

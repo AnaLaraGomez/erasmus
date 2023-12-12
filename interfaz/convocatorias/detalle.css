@@ -73,3 +73,19 @@ form {
 .becados {
     border-bottom: 2px solid green;
 }
+
+.fotoContenedor {
+    display: flex;
+    justify-content: center;
+    gap:1em;
+    align-items: flex-end;
+}
+ 
+#photo {
+    width: 12em;
+    border-radius: 50%;
+}
+
+.camara-botones {
+    display: flex;
+}

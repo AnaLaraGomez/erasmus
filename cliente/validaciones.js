@@ -56,12 +56,39 @@ HTMLFormElement.prototype.valido = function () {
     for (let i = 0; i < n; i++) {
         let funcionValidacion = elementos[i].getAttribute("data-valida");
         var resultadoValidacion = elementos[i][funcionValidacion]();
+        let elemento = elementos[i];
         if(resultadoValidacion){
-            elementos[i].classList.add("valido");
-            elementos[i].classList.remove("error-input");
+            elemento.classList.add("valido");
+            elemento.classList.remove("error-input");
         }else{
-            elementos[i].classList.remove("valido");
-            elementos[i].classList.add("error-input");
+            elemento.classList.remove("valido");
+            elemento.classList.add("error-input");
+        }
+        respuesta = respuesta && resultadoValidacion;
+    }
+    return respuesta;
+}
+
+HTMLFormElement.prototype.validoConFormDistribuido = function (formId) {
+    var elementos = document.forms[formId].elements;
+    var respuesta = true;
+    let n = elementos.length;
+    for (let i = 0; i < n; i++) {
+        let elemento = elementos[i];
+        
+        if(elemento.getAttribute('data-valida') == null) {
+            continue;
+        }
+
+        let funcionValidacion = elemento.getAttribute("data-valida");
+        var resultadoValidacion = elemento[funcionValidacion]();
+     
+        if(resultadoValidacion){
+            elemento.classList.add("valido");
+            elemento.classList.remove("error-input");
+        }else{
+            elemento.classList.remove("valido");
+            elemento.classList.add("error-input");
         }
         respuesta = respuesta && resultadoValidacion;
     }

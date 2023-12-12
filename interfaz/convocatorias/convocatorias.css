@@ -1,6 +1,7 @@
 .convocatoria {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .informacion {
@@ -12,10 +13,6 @@
     cursor: pointer;
     position: relative;
     display: inline-block;
-}
-
-.estado-borrador {
-    background-color: lightsalmon;
 }
 
 .estado-borrador:after {

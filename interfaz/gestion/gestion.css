@@ -60,6 +60,19 @@
     font-weight: bold;
  }
 
+ .foto {
+    float: right;
+    width: 8em;
+    height: 8em;
+    border-radius: 50%;
+    border: 2px solid  rgb(223, 129, 42);
+    overflow: hidden;
+ }
+ .foto img {
+    width: 8em;
+    height: 8em;
+ }
+
  .fila div input {
     width: 93%;
  }
@@ -67,3 +80,23 @@
  tr .miniatura {
     display: block;
  }
+
+ table .estado {
+    height: 2.5em;
+    width: 1px;
+    z-index: 0;
+ }
+
+ .lupa-btn {
+    height: 1.5em;
+    width: 1.5em;
+    border: unset;
+    background-color: white;
+    border-radius: 50%;
+    background-image:  url('http://localhost/erasmus/interfaz/images/lupa.png');
+    background-size: 1.5em 1.5em;
+    background-repeat: no-repeat;
+    background-position: center;
+ }
+
+ 
