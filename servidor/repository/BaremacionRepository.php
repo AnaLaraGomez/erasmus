@@ -37,6 +37,7 @@
             while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
                 $entrada = array();
                 $entrada['puntuacion'] = $resultados->puntuacion;
+                $entrada['excluido'] = $resultados->excluido;
                 $entrada['dni'] = Utilidades::ocultarDni($resultados->dni);
                 $respuesta[] = $entrada;
             }    

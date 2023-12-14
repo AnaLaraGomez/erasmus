@@ -12,6 +12,8 @@ var streamGlobal;
 var chiquichiqui;
 window.addEventListener("load", function() {
     chiquichiqui = document.getElementById("chiquichiqui");
+    document.getElementById('descargarPdfListadoBtn').style.display = 'none';
+    document.getElementById("descargarPdfListadoBtn").addEventListener("click", (ev) => { descargarListadoPdf(ev); });
     document.getElementById("sacarFotoBtn").style.display = 'none'; 
     document.getElementById("sacarFotoBtn").addEventListener("click", (ev) => { sacarFoto(ev)});
     document.getElementById("encenderCamaraBtn").addEventListener("click", (ev) => { encenderCamara(ev); });
@@ -48,15 +50,7 @@ window.addEventListener("load", function() {
         detalleGlobal = detalle;
         itemsQueSubeAlumno =  detalleGlobal.items.filter(itActual => itActual.subeAlumno == 1);
 
-        mostrarBotonSolicitarOContinuar();
-
-        // Pintar listas provisionales o definitivas
-        if(detalle.lista.length == 0) {
-            // Si aun no hay listados provisionales o definitivos,
-            // no pintamos este nodo
-            this.document.getElementById('listadoContenedor').style.display = 'none'
-        }
-        
+        mostrarBotonSolicitarOContinuar();        
         pintarConvocatoria();
     });   
 
@@ -238,33 +232,13 @@ window.addEventListener("load", function() {
             return;
         }else if(fechaListaProvisional < fechaActual && fechaActual < fechaListaDefinitiva ) {
             // estamos en lista provisional
-            document.getElementById('tipoListado').innerHTML = 'PROVISIONAL';
+            document.getElementById('descargarPdfListadoBtn').style.display = 'block';
+            document.getElementById('descargarPdfListadoBtn').innerHTML = 'Descargar listado provisional';
         } else if (fechaActual >= fechaListaDefinitiva) {
             // estamos en lista definitiva
-            document.getElementById('tipoListado').innerHTML = 'DEFINITIVO';
+            document.getElementById('descargarPdfListadoBtn').style.display = 'block';
+            document.getElementById('descargarPdfListadoBtn').innerHTML = 'Descargar listado definitivo';
         }
-
-        detalleGlobal.lista.sort(ordenarPorPuntuacion);
-        let becados = detalleGlobal.lista.slice(0, convocatoriaGlobal.movilidades);
-        let noBecados = detalleGlobal.lista.slice(convocatoriaGlobal.movilidades);
-
-        let listadoBecados = document.getElementById('listadoBecados');
-        becados.forEach( candidato => {
-            let li = document.createElement('li');
-            li.innerHTML= candidato.dni + ' - ' + candidato.puntuacion
-            listadoBecados.appendChild(li)
-        })
-
-        let listadoNoBecados = document.getElementById('listadoNoBecados');
-        noBecados.forEach( candidato => {
-            let li = document.createElement('li');
-            li.innerHTML = candidato.dni + ' - ' + candidato.puntuacion
-            listadoNoBecados.appendChild(li)
-        })
-    }
-
-    function ordenarPorPuntuacion(a,b) {
-        return  b.puntuacion - a.puntuacion // descendente!!
 
     }
 
@@ -373,6 +347,11 @@ window.addEventListener("load", function() {
 
     function descargarPdf() {
         window.open(`http://localhost/erasmus/servidor/api/apiPdf.php?convocatoriaId=${convocatoriaGlobal.id}`, "_blank");
+    }
+
+    function descargarListadoPdf() {
+        window.open(`http://localhost/erasmus/servidor/api/apiPdf.php?convocatoriaListadoId=${convocatoriaGlobal.id}`, "_blank");
+
     }
 
 })

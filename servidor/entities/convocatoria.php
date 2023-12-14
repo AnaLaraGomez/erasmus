@@ -73,6 +73,10 @@ class Convocatoria {
         return $this->nombre;
     }
 
+    function get_proyectoNombre(){
+        return $this->proyectoNombre;
+    }
+
     function set_id($id){
         $this->id = $id;
     }
@@ -109,6 +113,8 @@ class Convocatoria {
     function set_nombre($nombre){
         $this->nombre = $nombre;
     }
+
+    
 
     function to_json() {
         return '{'.

@@ -1,3 +1,5 @@
+
+//Variables globales
 var usuario;
 var candidato;
 var baremables;
@@ -11,6 +13,7 @@ window.addEventListener("load", function() {
     document.getElementById('atras').addEventListener('click', () => atras());
 
     // Obtener el candidatoId y la convocatoriaId que vamos a evaluar
+    //Para ello, obtemos de los query params y los dividimos para obtener cada dato por separado
     let parametrosSucios = this.document.location.href.split('convocatoriaId=')[1]
     let parametros = parametrosSucios.split('&candidatoId=')
     convocatoriaId = parametros[0];
@@ -52,6 +55,7 @@ window.addEventListener("load", function() {
         pintarBaremable();
     }
 
+    // Mostramos los datos del tutor en función de la mayoría de edad
     function mostrarCamposTutor(){
         let fechaNacimiento = new Date(candidato.fechaNac);
         let fechaActualMenos18Años = new Date();
@@ -126,9 +130,12 @@ window.addEventListener("load", function() {
         notaInput.type = 'number';
         notaInput.name = 'nota';
         notaInput.max = baremable.notaMax;
+        // Tenemos que evitar que se puedan introducir valores mediante teclado
         notaInput.setAttribute('onKeyDown', "return false");
+        // Pedimos validaciones
         notaInput.setAttribute('data-valida', "relleno");
         notaInput.min = 0;
+        // Volvamos la nota almacenada en bd
         if(baremable.itemNota != null) {
             notaInput.value = baremable.itemNota;
         }
@@ -140,7 +147,7 @@ window.addEventListener("load", function() {
 
         let acciones = document.createElement('td');
         
-
+        //Controlamos la subida de los items que sube el alumno
         if(baremable.subeAlumno == 0) {
             let seleccionarFichero = document.createElement('input');
             seleccionarFichero.type = 'file';
@@ -149,7 +156,9 @@ window.addEventListener("load", function() {
             seleccionarFichero.setAttribute('form', formId);
             seleccionarFichero.setAttribute('data-valida', 'ficheroSubidoOSeleccionado');
             seleccionarFichero.setAttribute('data-subido', baremable.itemUrl != null);
+            //Controlamos si existe un cambio en el fichero que subimos
             seleccionarFichero.addEventListener('change', (e)=> {
+                //Solo un archivo y que sea tipo pdf
                 if(e.target.files.length == 1 && e.target.files[0].type=="application/pdf") {
                     e.target.classList.remove('error-input');
                     let iframe = document.createElement("iframe");
@@ -186,7 +195,9 @@ window.addEventListener("load", function() {
 
         const formData = new FormData();
         let formId = e.target.getAttribute('form');
-
+        //Después de capturar el formulario, aplicamos una validación especial 
+        //que nos permite validar elementos dentro del form y elementos que forma parte de él pero se encuentran fuera
+        // usando el atributo "form".
         if(!document.getElementById(formId).validoConFormDistribuido(formId)) {
             return;
         }

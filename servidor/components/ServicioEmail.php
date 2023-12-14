@@ -82,7 +82,10 @@ class ServicioEmail {
         return $resul;
     }
 
-    public static function enviarEmailSolicitudConvocatoria($correo, $nombre, $apellidos) {
+    public static function enviarEmailSolicitudConvocatoria($candidato, $usuario, $convocatoria) {
+        $correo = $candidato->get_correo();
+        $nombre = $candidato->get_nombre();
+        $apellidos = $candidato->get_apellidos();
         $mail = self::generarEmailBase();
         // asunto
         $mail->Subject    = "Solicitud Erasmus";
@@ -97,7 +100,7 @@ class ServicioEmail {
         $mail->MsgHTML($plantilla);
         // adjuntos
         // Fabricar PDF
-        $rutaDelPdf = ServicioPdf::generarPdfSolicitud();
+        $rutaDelPdf = ServicioPdf::generarPdfSolicitud($candidato, $usuario, $convocatoria);
         $mail->addAttachment($rutaDelPdf);
         // destinatario
         $mail->AddAddress($correo, $nombre);

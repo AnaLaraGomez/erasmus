@@ -2,7 +2,7 @@
     class ConvocatoriaRepository {
 
         public static function obtenerConvocatoriasAbiertas() {
-            $consultas = Conexion::basedatos()->query("SELECT c.*, p.nombre as proyecto_nombre from convocatoria c
+            $consultas = Conexion::basedatos()->query("SELECT c.*, CONCAT(p.codigo, ' ', p.nombre) as proyecto_nombre from convocatoria c
             inner join proyecto p on p.id = c.proyecto_id
             where fecha_inicio_solicitudes <= NOW();");
             $convocatorias = array();
@@ -171,7 +171,10 @@
         }
 
         public static function obtenerConvocatoriaPorId($id) {
-            $consultas = Conexion::basedatos()->query("Select * from convocatoria where id = $id");
+            $consultas = Conexion::basedatos()->query("Select c.*,  CONCAT(p.codigo, ' ', p.nombre) as proyecto_nombre 
+            FROM convocatoria c 
+            inner join proyecto p on p.id = c.proyecto_id 
+            where c.id = $id");
             while ($resultados = $consultas->fetch(PDO::FETCH_OBJ)) {
                  return new Convocatoria(
                     $resultados->id,
@@ -186,6 +189,7 @@
                     $resultados->proyecto_id,
                     $resultados->descripcion,
                     $resultados->nombre,
+                    $resultados->proyecto_nombre
                 );
             }
         }

@@ -1,3 +1,7 @@
+
+// Después de comenzar este script me comentaron que no era necesaria en el proyecto, por lo que todo lo que aparece 
+// no está implementando y se debe ignorar
+
 var proyectos = [];
 
 window.addEventListener("load", function() {

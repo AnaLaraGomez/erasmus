@@ -13,8 +13,9 @@ window.addEventListener("load", function() {
             }
         });
     }
-
+    //Cargamos todos los cursos que hay disponibles
     cargarCursos();
+    //Tenenos que controlar que si es menor de edad aparezcan los campos del tutor, si es mayor no
     let fechaNac = document.getElementById("fechaNac");
     if(fechaNac != null) {
         fechaNac.addEventListener('change', (event) =>{
@@ -80,6 +81,9 @@ function registrar() {
         method: "POST",
         body: new FormData(formularioAEnviar),
     };
+    if(!formularioAEnviar.valido()) {
+        return;
+    }
     // mostrar gif de 'cargando ...'
     document.getElementById("chiquichiqui").style.display = 'block';
 

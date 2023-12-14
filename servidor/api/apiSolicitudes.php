@@ -27,7 +27,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         if($_GET['enviar'] == 'true')  {
             $candidato = CandidatoRepository::obtenerCandidatoPorId($user->get_id());
-            ServicioEmail::enviarEmailSolicitudConvocatoria($candidato->get_correo(), $candidato->get_nombre(), $candidato->get_apellidos());
+            $convocatoria = ConvocatoriaRepository::obtenerConvocatoriaPorId($convocatoriaId);
+            ServicioEmail::enviarEmailSolicitudConvocatoria($candidato, $user,$convocatoria );
         }
         $response['status_code'] = 201; // Created
         echo json_encode($response);
